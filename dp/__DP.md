@@ -103,3 +103,23 @@ i-j>=0 일때만 계산
 
 초기값
 dp[0]=H(원금)
+
+# 2491 수열
+
+increment[i] 는 arr[i] 로 끝나는 수열 중 가장 긴 증가하는 구간의 길이
+decrement[i] 는 arr[i] 로 끝나는 수열 중 가장 긴 감소하는 구간의 길이
+
+초기값
+increment[n]=1;
+decrement[n]=1;
+
+# 11048 이동하기
+
+memo[i][j] 는 (i,j)까지 이동했을 때 얻을 수 있는 사탕의 최대 개수
+
+조건식
+
+memo[i][j] = max(memo[i][j - 1], memo[i - 1][j], memo[i - 1][j - 1]) + (i,j)에 있는 사탕의 개수
+
+초기값
+memo[n][m] = 0; (0<=n<=N , 0<=m<=M)
