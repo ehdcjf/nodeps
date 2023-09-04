@@ -5,11 +5,19 @@ const rl = readline.createInterface({
 	output: process.stdout,
 });
 
-let input = [];
-
 rl.on('line', function (line) {
-	input.push(line);
+	if (isNaN(Number(line))) {
+		const f = line.split(' ').map((v) => {
+			if (v == 'swimming') return 'soccer';
+			else return 'swimming';
+		});
+		console.log(f.join(' '));
+		process.exit();
+	} else {
+		console.log(Array(1500).fill('bowling').join(' '));
+		readline.cursorTo(process.stdout, 0, 0);
+		readline.clearScreenDown(process.stdout);
+	}
 }).on('close', function () {
-	console.log(input);
 	process.exit();
 });

@@ -1,10 +1,33 @@
-const x =
-	'F_0_2,F_1_1,F_2_0,F_3_0,F_4_0,C_0_0,C_1_0,C_2_0,C_3_0,C_4_0,C_5_0,C_6_0,C_7_0,C_8_0,C_9_0,C_10_0,C_11_0,C_12_0,C_13_0,C_14_0,C_15_0,C_16_0,C_17_0,C_18_0,C_19_0,C_20_0,C_21_0,C_22_0,C_23_0,C_24_0,C_25_0,C_26_0,C_27_0,C_28_0,C_29_0,C_30_0,C_31_0,C_32_0,C_33_0,C_34_0,C_35_0,C_36_0,C_37_0,C_38_0,C_39_0,C_40_0,C_41_0,C_42_0,C_43_0,C_44_0,C_45_0,C_46_0,C_47_0,C_48_0,C_49_0,S_0_0,S_1_0,S_2_0,S_3_0,A_0_0,A_1_0,A_2_0,A_3_0,A_4_0,A_5_0,A_6_0,A_7_0,A_8_0,A_9_0,A_10_0,A_11_0,A_12_0,A_13_0,A_14_0,A_15_0,A_16_0,A_17_0';
+// for (let i = 1; i <= 50; i++) {
+// 	for (let j = 1; j <= 100; j++) {
+// 		if (i == 1 || j == 1) continue;
+// 		let time = 1;
+// 		const X = i;
+// 		const Y = j;
+// 		let x = i;
+// 		let y = 2;
 
-const y = x.split(',');
+// 		while (x != y) {
+// 			x -= 1;
+// 			y += 1;
+// 			if (x == 0) x = X;
+// 			if (y == Y + 1) y = 1;
+// 			time++;
+// 		}
+// 		if (i % 2 != 0 && j % 2 != 0) {
+// 			// if (i == j) {
+// 			console.log(i, j, time);
+// 		}
+// 	}
+// }
 
-console.log(y);
+// const x = '2023-05-22';
 
-const t = 'G_0';
+// const y = x.substring(0, 4);
+// const m = x.substring(4, 6);
+// const d = x.substring(6, 8);
 
-console.log(!y.some((v) => v.startsWith(t)));
+// const dd = new Date(x);
+// console.log(dd);
+
+const a = Array(300000).fill(0);

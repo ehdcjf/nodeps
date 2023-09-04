@@ -39,28 +39,27 @@ class UF {
 			this.subsets[yroot].rank++;
 		}
 	}
+
+	// The main function to check whether
+	// a given graph contains cycle or not
+	// function isCycle()
+	// {
+
+	//         let subsets = new Array(V);
+	//         for (let v = 0; v < V; v++) {
+
+	//             subsets[v] = new subset();
+	//             subsets[v].parent = v;
+	//             subsets[v].rank = 0;
+	//         }
+
+	//         for (let e = 0; e < E; e++) {
+	//             let x = find(subsets, edge[e].src);
+	//             let y = find(subsets, edge[e].dest);
+	//             if (x == y)
+	//                 return 1;
+	//             Union(subsets, x, y);
+	//         }
+	//         return 0;
+	// }
 }
-
-const readline = require('readline').createInterface({
-	input: process.stdin,
-	output: process.stdout,
-});
-
-let uf;
-readline.on('line', function (line) {
-	const input = line.split(' ').map(Number);
-	if (input.length == 1) {
-		uf = new UF(input[0] + 1);
-	} else {
-		const [s, d] = input;
-		uf.union(s, d);
-	}
-}).on('close', function () {
-	let p = uf.find(1);
-	for (let i = 2; i < uf.subsets.length; i++) {
-		if (p != uf.find(i)) {
-			console.log(1, i);
-			process.exit();
-		}
-	}
-});

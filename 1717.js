@@ -1,10 +1,5 @@
-class Edge {
-	constructor() {
-		this.src = 0;
-		this.dest = 0;
-	}
-}
-
+// https://www.acmicpc.net/problem/1717
+// 집합의 표현
 class SubSet {
 	constructor(i) {
 		this.parent = i;
@@ -40,27 +35,33 @@ class UF {
 		}
 	}
 }
-
 const readline = require('readline').createInterface({
 	input: process.stdin,
 	output: process.stdout,
 });
-
+const answer = [];
 let uf;
 readline.on('line', function (line) {
-	const input = line.split(' ').map(Number);
-	if (input.length == 1) {
-		uf = new UF(input[0] + 1);
+	const nums = line.split(' ').map(Number);
+	if (nums.length == 2) {
+		const [N, M] = nums;
+		uf = new UF(N + 1);
 	} else {
-		const [s, d] = input;
-		uf.union(s, d);
-	}
-}).on('close', function () {
-	let p = uf.find(1);
-	for (let i = 2; i < uf.subsets.length; i++) {
-		if (p != uf.find(i)) {
-			console.log(1, i);
-			process.exit();
+		const [c, a, b] = nums;
+		switch (c) {
+			case 0: // 합집합
+				uf.union(a, b);
+				break;
+			case 1: // 확인
+				if (uf.find(a) == uf.find(b)) {
+					answer.push('YES');
+				} else {
+					answer.push('NO');
+				}
+				break;
 		}
 	}
+}).on('close', function () {
+	console.log(answer.join('\n'));
+	process.exit();
 });
