@@ -23,7 +23,8 @@ class UF {
 		if (this.subsets[i].parent == i) {
 			return i;
 		} else {
-			return this.find(this.subsets[i].parent);
+			this.subsets[i].parent = this.find(this.subsets[i].parent);
+			return this.subsets[i].parent;
 		}
 	}
 

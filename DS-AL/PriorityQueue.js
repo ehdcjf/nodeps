@@ -1,98 +1,120 @@
 class PriorityQueue {
-	constructor(callback) {
+	constructor(priority) {
 		this.heap = [];
-		this.callback = callback;
+		this.pairIsInCorrectOrder = priority;
 	}
 
-	swap(a, b) {
-		const temp = { ...this.heap[a] };
-		this.heap[a] = this.heap[b];
-		this.heap[b] = temp;
+	getLeftChildIndex(parentIndex) {
+		return 2 * parentIndex + 1;
 	}
 
-	size() {
-		return this.heap.length;
+	getRightChildIndex(parentIndex) {
+		return 2 * parentIndex + 2;
 	}
 
-	getParentIndex(cur) {
-		return Math.floor((cur - 1) / 2);
+	getParentIndex(childIndex) {
+		return Math.floor((childIndex - 1) / 2);
 	}
 
-	push(value) {
-		this.heap.push(value);
-		let current = this.size() - 1;
-		let parent = this.getParentIndex(current);
+	hasParent(childIndex) {
+		return this.getParentIndex(childIndex) >= 0;
+	}
 
-		while (parent >= 0 && this.callback(value, this.heap[parent])) {
-			this.swap(parent, current);
-			current = parent;
-			parent = this.getParentIndex(current);
-		}
+	hasLeftChild(parentIndex) {
+		return this.getLeftChildIndex(parentIndex) < this.heap.length;
+	}
+
+	hasRightChild(parentIndex) {
+		return this.getRightChildIndex(parentIndex) < this.heap.length;
+	}
+
+	leftChild(parentIndex) {
+		return this.heap[this.getLeftChildIndex(parentIndex)];
+	}
+
+	rightChild(parentIndex) {
+		return this.heap[this.getRightChildIndex(parentIndex)];
+	}
+
+	parent(childIndex) {
+		return this.heap[this.getParentIndex(childIndex)];
+	}
+
+	swap(indexA, indexB) {
+		const tmp = this.heap[indexA];
+		this.heap[indexA] = this.heap[indexB];
+		this.heap[indexB] = tmp;
+	}
+
+	peek() {
+		return this.heap.length == 0 ? null : this.heap[0];
+	}
+
+	isEmpty() {
+		return !this.heap.length;
 	}
 
 	pop() {
-		const last = this.size() - 1;
-		let current = 0;
-		this.swap(current, last);
-		const value = this.heap.pop();
-
-		while (current < last) {
-			const left = current * 2 + 1;
-			const right = current * 2 + 2;
-
-			if (left >= last) {
-				break;
-			} else if (right >= last) {
-				if (this.callback(this.heap[left], this.heap[current])) {
-					this.swap(current, left);
-					current = left;
-				} else {
-					break;
-				}
-			} else {
-				if (
-					this.callback(this.heap[left], this.heap[current]) ||
-					this.callback(this.heap[right], this.heap[current])
-				) {
-					const next = this.callback(this.heap[left], this.heap[right]) ? left : right;
-					this.swap(current, next);
-					current = next;
-				} else {
-					break;
-				}
-			}
+		if (this.heap.length == 0) {
+			return null;
 		}
-		return value;
+
+		if (this.heap.length == 1) {
+			return this.heap.pop();
+		}
+
+		const item = this.heap[0];
+
+		this.heap[0] = this.heap.pop();
+		this.bubbleDown();
+		return item;
+	}
+
+	push(item) {
+		this.heap.push(item);
+		this.bubbleUp();
+		return this;
+	}
+
+	bubbleUp() {
+		let currentIndex = this.heap.length - 1;
+
+		while (
+			this.hasParent(currentIndex) &&
+			!this.pairIsInCorrectOrder(this.parent(currentIndex), this.heap[currentIndex])
+		) {
+			this.swap(currentIndex, this.getParentIndex(currentIndex));
+			currentIndex = this.getParentIndex(currentIndex);
+		}
+	}
+
+	bubbleDown() {
+		let currentIndex = 0;
+		let nextIndex = null;
+
+		while (this.hasLeftChild(currentIndex)) {
+			if (
+				this.hasRightChild(currentIndex) &&
+				this.pairIsInCorrectOrder(this.rightChild(currentIndex), this.leftChild(currentIndex))
+			) {
+				nextIndex = this.getRightChildIndex(currentIndex);
+			} else {
+				nextIndex = this.getLeftChildIndex(currentIndex);
+			}
+			if (this.pairIsInCorrectOrder(this.heap[currentIndex], this.heap[nextIndex])) {
+				break;
+			}
+			this.swap(currentIndex, nextIndex);
+			currentIndex = nextIndex;
+		}
 	}
 }
 
-const callback = (a, b) => {
-	if (a.time > b.time) return true;
-	else if (a.time < b.time) return false;
+const priority = (a, b) => {
+	if (a.priority > b.priority) return true;
+	else if (a.priority < b.priority) return false;
 	else {
-		if (a.end < b.end) return true;
-		else if (a.end > b.end) return false;
+		if (a.id < b.id) return true;
 		else return false;
 	}
 };
-
-const pq = new PriorityQueue(callback);
-for (let i = 0; i < 10; i++) {
-	for (let j = 0; j < 4; j++) {
-		const rand = Math.random();
-		const item = { num: i, num2: rand };
-		pq.push(item);
-	}
-}
-
-while (pq.size()) {
-	console.log(pq.pop());
-}
-4;
-3;
-2;
-4;
-1;
-3;
-4;
-5;

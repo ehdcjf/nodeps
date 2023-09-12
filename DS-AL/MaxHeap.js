@@ -2,76 +2,123 @@ class MaxHeap {
 	constructor() {
 		this.heap = [];
 	}
-	swap(a, b) {
-		[this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
+
+	getLeftChildIndex(parentIndex) {
+		return 2 * parentIndex + 1;
 	}
 
-	size() {
-		return this.heap.length;
+	getRightChildIndex(parentIndex) {
+		return 2 * parentIndex + 2;
 	}
 
-	push(value) {
-		this.heap.push(value);
-		let current = this.heap.length - 1;
-		let parent = Math.floor((current - 1) / 2);
+	getParentIndex(childIndex) {
+		return Math.floor((childIndex - 1) / 2);
+	}
 
-		while (this.heap[parent] < value) {
-			this.swap(parent, current);
-			current = parent;
-			parent = Math.floor((current - 1) / 2);
-		}
+	hasParent(childIndex) {
+		return this.getParentIndex(childIndex) >= 0;
+	}
+
+	hasLeftChild(parentIndex) {
+		return this.getLeftChildIndex(parentIndex) < this.heap.length;
+	}
+
+	hasRightChild(parentIndex) {
+		return this.getRightChildIndex(parentIndex) < this.heap.length;
+	}
+
+	leftChild(parentIndex) {
+		return this.heap[this.getLeftChildIndex(parentIndex)];
+	}
+
+	rightChild(parentIndex) {
+		return this.heap[this.getRightChildIndex(parentIndex)];
+	}
+
+	parent(childIndex) {
+		return this.heap[this.getParentIndex(childIndex)];
+	}
+
+	swap(indexA, indexB) {
+		const tmp = this.heap[indexA];
+		this.heap[indexA] = this.heap[indexB];
+		this.heap[indexB] = tmp;
+	}
+
+	peek() {
+		return this.heap.length == 0 ? null : this.heap[0];
+	}
+
+	isEmpty() {
+		return !this.heap.length;
 	}
 
 	pop() {
-		const last = this.heap.length - 1;
-		let current = 0;
-		this.swap(current, last); // 0번이 루트노드
-		const value = this.heap.pop();
-
-		while (current < last) {
-			let left = current * 2 + 1;
-			let right = current * 2 + 2;
-
-			if (left >= last) {
-				break;
-			} else if (right >= last) {
-				if (this.heap[current] < this.heap[left]) {
-					this.swap(current, left);
-					current = left;
-				} else {
-					break;
-				}
-			} else {
-				if (
-					this.heap[left] > this.heap[current] ||
-					this.heap[right] > this.heap[current]
-				) {
-					let next =
-						this.heap[left] >
-						this.heap[right]
-							? left
-							: right;
-					this.swap(current, next);
-					current = next;
-				} else {
-					break;
-				}
-			}
+		if (this.heap.length == 0) {
+			return null;
 		}
-		return value;
+
+		if (this.heap.length == 1) {
+			return this.heap.pop();
+		}
+
+		const item = this.heap[0];
+
+		this.heap[0] = this.heap.pop();
+		this.bubbleDown();
+		return item;
+	}
+
+	push(item) {
+		this.heap.push(item);
+		this.bubbleUp();
+		return this;
+	}
+
+	bubbleUp() {
+		let currentIndex = this.heap.length - 1;
+
+		while (
+			this.hasParent(currentIndex) &&
+			!this.pairIsInCorrectOrder(this.parent(currentIndex), this.heap[currentIndex])
+		) {
+			this.swap(currentIndex, this.getParentIndex(currentIndex));
+			currentIndex = this.getParentIndex(currentIndex);
+		}
+	}
+
+	bubbleDown() {
+		let currentIndex = 0;
+		let nextIndex = null;
+
+		while (this.hasLeftChild(currentIndex)) {
+			if (
+				this.hasRightChild(currentIndex) &&
+				this.pairIsInCorrectOrder(this.rightChild(currentIndex), this.leftChild(currentIndex))
+			) {
+				nextIndex = this.getRightChildIndex(currentIndex);
+			} else {
+				nextIndex = this.getLeftChildIndex(currentIndex);
+			}
+			if (this.pairIsInCorrectOrder(this.heap[currentIndex], this.heap[nextIndex])) {
+				break;
+			}
+			this.swap(currentIndex, nextIndex);
+			currentIndex = nextIndex;
+		}
+	}
+
+	pairIsInCorrectOrder(elementA, elementB) {
+		return elementA > elementB;
 	}
 }
 
-const h = new MaxHeap();
+const maxHeap = new MaxHeap();
+maxHeap.push(0);
+maxHeap.push(3);
+maxHeap.push(2);
+maxHeap.push(1);
 
-h.push(10);
-h.push(14);
-h.push(15);
-h.push(100);
-h.push(1023);
-
-console.log(h.pop());
-console.log(h.pop());
-console.log(h.pop());
-console.log(h.pop());
-console.log(h.pop());
+while (!maxHeap.isEmpty()) {
+	console.log(maxHeap.pop());
+}
