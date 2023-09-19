@@ -1,43 +1,34 @@
-class Edge {
+class Node {
+	constructor(item) {
+		this.item = item;
+		this.next = null;
+	}
+}
+
+class Queue {
 	constructor() {
-		this.src = 0;
-		this.dest = 0;
-	}
-}
-
-class SubSet {
-	constructor(i) {
-		this.parent = i;
-		this.rank = 0;
-	}
-}
-
-class UF {
-	constructor(N) {
-		this.subsets = Array.from(Array(N), (_, i) => {
-			return new SubSet(i);
-		});
+		this.head = null;
+		this.tail = null;
+		this.length = 0;
 	}
 
-	find(i) {
-		if (this.subsets[i].parent == i) {
-			return i;
+	push(item) {
+		const node = new Node(item);
+		if (this.head == null) {
+			this.head = node;
 		} else {
-			return this.find(this.subsets[i].parent);
+			this.tail.next = node;
 		}
+
+		this.tail = node;
+		this.length += 1;
 	}
 
-	union(x, y) {
-		const xroot = this.find(x);
-		const yroot = this.find(y);
-		if (this.subsets[xroot].rank < this.subsets[yroot].rank) {
-			this.subsets[xroot].parent = yroot;
-		} else if (this.subsets[xroot].rank > this.subsets[yroot].rank) {
-			this.subsets[yroot].parent = xroot;
-		} else {
-			this.subsets[xroot].parent = yroot;
-			this.subsets[yroot].rank++;
-		}
+	pop() {
+		const popItem = this.head;
+		this.head = this.head.next;
+		this.length -= 1;
+		return popItem.item;
 	}
 }
 
@@ -46,21 +37,46 @@ const readline = require('readline').createInterface({
 	output: process.stdout,
 });
 
-let uf;
+const input = new Queue();
+
 readline.on('line', function (line) {
-	const input = line.split(' ').map(Number);
-	if (input.length == 1) {
-		uf = new UF(input[0] + 1);
-	} else {
-		const [s, d] = input;
-		uf.union(s, d);
-	}
+	input.push(line.split(' ').map(Number));
 }).on('close', function () {
-	let p = uf.find(1);
-	for (let i = 2; i < uf.subsets.length; i++) {
-		if (p != uf.find(i)) {
-			console.log(1, i);
-			process.exit();
+	const newGogaek = Array(100001);
+
+	const q = new Queue();
+	const [N, T, W] = input.pop();
+	for (let i = 0; i < N; i++) {
+		const [p, t] = input.pop();
+		q.push([p, t]);
+	}
+	const [M] = input.pop();
+
+	for (let i = 0; i < M; i++) {
+		const [p, t, c] = input.pop();
+		newGogaek[c] = [p, t];
+	}
+
+	let w = 0;
+	const answer = [];
+	while (true) {
+		const [p, t] = q.pop();
+		const tx = Math.min(T, t);
+		for (let i = 1; i <= tx; i++) {
+			w += 1;
+			answer.push(p);
+			if (newGogaek[w]) {
+				q.push(newGogaek[w]);
+			}
+
+			if (w == W) {
+				console.log(answer.slice(0, W).join('\n'));
+				process.exit(0);
+			}
+		}
+
+		if (t - tx > 0) {
+			q.push([p, t - tx]);
 		}
 	}
 });
