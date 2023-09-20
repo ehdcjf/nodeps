@@ -1,5 +1,21 @@
-const x = Number(BigInt(1) / BigInt(20010610));
-const y = Number(BigInt(2) / BigInt(20010610));
-const z = Number(BigInt(3) / BigInt(20010610));
-
-console.log(Math.max(x, y, z));
+for (let i = 0; i < 1 << 9; i++) {
+	let x = i;
+	let cnt = 0;
+	while (x > 0) {
+		if ((x & 1) == 1) {
+			cnt++;
+		}
+		x >>= 1;
+	}
+	if (cnt == 5)
+		console.log(
+			i
+				.toString(2)
+				.padStart(9, '0')
+				.split('')
+				.reduce((r, v, i) => {
+					if (v == '1') r.push(position[i]);
+					return r;
+				}, [])
+		);
+}

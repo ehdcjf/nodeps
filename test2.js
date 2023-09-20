@@ -42,16 +42,18 @@ const input = require('fs')
 	.map((v) => v.trim());
 const [H, W] = input
 	.shift()
+	.trim()
 	.split(' ')
 	.map((v) => Number(v));
 
 input.shift();
 const K = input
 	.shift()
+	.trim()
 	.split(' ')
 	.map((v) => BigInt(v));
 
-let board = input.map((v) => v.split(''));
+let board = input.map((v) => v.trim().split(''));
 
 const standardDice = [];
 // 위, 아래, 왼쪽, 오른쪽
@@ -178,7 +180,6 @@ const dicePattern = [
 	],
 ].map((v) => rotate(v));
 
-// process.exit();
 function rotate(arr1) {
 	const r = arr1.length;
 	const c = arr1[0].length;
@@ -353,6 +354,182 @@ const transformDiceToFirstDicePattern = [
 	],
 ];
 
+function rotateZero(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+	newDice[1][0][0] = dice[4][0][0];
+	newDice[1][0][1] = dice[4][0][1];
+	newDice[1][0][2] = dice[4][0][2];
+
+	newDice[2][0][0] = dice[1][0][0];
+	newDice[2][0][1] = dice[1][0][1];
+	newDice[2][0][2] = dice[1][0][2];
+
+	newDice[3][0][0] = dice[2][0][0];
+	newDice[3][0][1] = dice[2][0][1];
+	newDice[3][0][2] = dice[2][0][2];
+
+	newDice[4][0][0] = dice[3][0][0];
+	newDice[4][0][1] = dice[3][0][1];
+	newDice[4][0][2] = dice[3][0][2];
+	return newDice;
+}
+
+function rotateFive(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+
+	newDice[1][2][0] = dice[4][2][0];
+	newDice[1][2][1] = dice[4][2][1];
+	newDice[1][2][2] = dice[4][2][2];
+
+	newDice[2][2][0] = dice[1][2][0];
+	newDice[2][2][1] = dice[1][2][1];
+	newDice[2][2][2] = dice[1][2][2];
+
+	newDice[3][2][0] = dice[2][2][0];
+	newDice[3][2][1] = dice[2][2][1];
+	newDice[3][2][2] = dice[2][2][2];
+
+	newDice[4][2][0] = dice[3][2][0];
+	newDice[4][2][1] = dice[3][2][1];
+	newDice[4][2][2] = dice[3][2][2];
+
+	return newDice;
+}
+
+function rotateOne(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+
+	newDice[2][0][0] = dice[0][0][0];
+	newDice[2][1][0] = dice[0][1][0];
+	newDice[2][2][0] = dice[0][2][0];
+
+	newDice[5][0][0] = dice[2][0][0];
+	newDice[5][1][0] = dice[2][1][0];
+	newDice[5][2][0] = dice[2][2][0];
+
+	newDice[4][2][2] = dice[5][0][0];
+	newDice[4][1][2] = dice[5][1][0];
+	newDice[4][0][2] = dice[5][2][0];
+
+	newDice[0][0][0] = dice[4][2][2];
+	newDice[0][1][0] = dice[4][1][2];
+	newDice[0][2][0] = dice[4][0][2];
+
+	return newDice;
+}
+
+function rotateTwo(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+
+	newDice[0][2][0] = dice[1][2][2];
+	newDice[0][2][1] = dice[1][1][2];
+	newDice[0][2][2] = dice[1][0][2];
+
+	newDice[3][0][0] = dice[0][2][0];
+	newDice[3][1][0] = dice[0][2][1];
+	newDice[3][2][0] = dice[0][2][2];
+
+	newDice[5][0][2] = dice[3][0][0];
+	newDice[5][0][1] = dice[3][1][0];
+	newDice[5][0][0] = dice[3][2][0];
+
+	newDice[1][2][2] = dice[5][0][2];
+	newDice[1][1][2] = dice[5][0][1];
+	newDice[1][0][2] = dice[5][0][0];
+
+	return newDice;
+}
+
+function rotateThree(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+	newDice[0][2][2] = dice[2][2][2];
+	newDice[0][1][2] = dice[2][1][2];
+	newDice[0][0][2] = dice[2][0][2];
+
+	newDice[4][0][0] = dice[0][2][2];
+	newDice[4][1][0] = dice[0][1][2];
+	newDice[4][2][0] = dice[0][0][2];
+
+	newDice[5][2][2] = dice[4][0][0];
+	newDice[5][1][2] = dice[4][1][0];
+	newDice[5][0][2] = dice[4][2][0];
+
+	newDice[2][2][2] = dice[5][2][2];
+	newDice[2][1][2] = dice[5][1][2];
+	newDice[2][0][2] = dice[5][0][2];
+
+	return newDice;
+}
+
+function rotateFour(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+
+	newDice[1][0][0] = dice[0][0][2];
+	newDice[1][1][0] = dice[0][0][1];
+	newDice[1][2][0] = dice[0][0][0];
+
+	newDice[5][2][0] = dice[1][0][0];
+	newDice[5][2][1] = dice[1][1][0];
+	newDice[5][2][2] = dice[1][2][0];
+
+	newDice[3][2][2] = dice[5][2][0];
+	newDice[3][1][2] = dice[5][2][1];
+	newDice[3][0][2] = dice[5][2][2];
+
+	newDice[0][0][2] = dice[3][2][2];
+	newDice[0][0][1] = dice[3][1][2];
+	newDice[0][0][0] = dice[3][0][2];
+	return newDice;
+}
+
+function getrotatedDice(dice) {
+	const rotate01 = rotateZero(dice);
+	const rotate02 = rotateZero(rotate01);
+	const rotate03 = rotateZero(rotate02);
+
+	const rotate11 = rotateOne(dice);
+	const rotate12 = rotateOne(rotate11);
+	const rotate13 = rotateOne(rotate12);
+
+	const rotate21 = rotateTwo(dice);
+	const rotate22 = rotateTwo(rotate21);
+	const rotate23 = rotateTwo(rotate22);
+
+	const rotate31 = rotateThree(dice);
+	const rotate32 = rotateThree(rotate31);
+	const rotate33 = rotateThree(rotate32);
+
+	const rotate41 = rotateFour(dice);
+	const rotate42 = rotateFour(rotate41);
+	const rotate43 = rotateFour(rotate42);
+
+	const rotate51 = rotateFive(dice);
+	const rotate52 = rotateFive(rotate51);
+	const rotate53 = rotateFive(rotate52);
+
+	return [
+		dice,
+		rotate01,
+		rotate02,
+		rotate03,
+		rotate11,
+		rotate12,
+		rotate13,
+		rotate21,
+		rotate22,
+		rotate23,
+		rotate31,
+		rotate32,
+		rotate33,
+		rotate41,
+		rotate42,
+		rotate43,
+		rotate51,
+		rotate52,
+		rotate53,
+	];
+}
+
 const partsOfDice = [];
 
 function getPartsIndex(i, j) {
@@ -361,7 +538,9 @@ function getPartsIndex(i, j) {
 		[+board[i + 2][j + 1], +board[i + 2][j + 2], +board[i + 2][j + 3]],
 		[+board[i + 3][j + 1], +board[i + 3][j + 2], +board[i + 3][j + 3]],
 	];
-	partsOfDice.push(...rotate(plane));
+	rotate(plane).forEach((v) => {
+		partsOfDice.push(v);
+	});
 	return partsOfDice.length - 4;
 }
 
@@ -491,8 +670,8 @@ for (let i = 0; i < H; i++) {
 					const patternColumn = pattern[0].length;
 
 					const diceRow = dice.length;
-					const diceCoulum = dice[0].length;
-					if (patternRow != diceRow || patternColumn != diceCoulum) continue;
+					const diceColumn = dice[0].length;
+					if (patternRow != diceRow || patternColumn != diceColumn) continue;
 
 					if (checkDicePattern(pattern, dice)) {
 						const result = transformDiceToFirstDicePattern[i](
@@ -529,169 +708,25 @@ function possibleNumDfs(arr) {
 
 possibleNumDfs([]);
 
-function rotate18(arr) {
-	const rst = [arr];
-
-	//0 을 회전
-	for (let i = 0; i < 3; i++) {
-		let newArr = rst[rst.length - 1].map((v) => [...v]);
-		const temp = [...newArr[1][0]];
-		newArr[1][0][0] = newArr[2][0][0];
-		newArr[1][0][1] = newArr[2][0][1];
-		newArr[1][0][2] = newArr[2][0][2];
-		newArr[2][0][0] = newArr[3][0][0];
-		newArr[2][0][1] = newArr[3][0][1];
-		newArr[2][0][2] = newArr[3][0][2];
-		newArr[3][0][0] = newArr[4][0][0];
-		newArr[3][0][1] = newArr[4][0][1];
-		newArr[3][0][2] = newArr[4][0][2];
-		newArr[4][0][0] = temp[0];
-		newArr[4][0][1] = temp[1];
-		newArr[4][0][2] = temp[2];
-		rst.push(newArr);
-	}
-
-	// 5를 회전
-	for (let i = 0; i < 3; i++) {
-		let newArr = i == 0 ? arr.map((v) => [...v]) : rst[rst.length - 1].map((v) => [...v]);
-		const temp = [...newArr[1][2]];
-		newArr[1][2][0] = newArr[2][2][0];
-		newArr[1][2][1] = newArr[2][2][1];
-		newArr[1][2][2] = newArr[2][2][2];
-		newArr[2][2][0] = newArr[3][2][0];
-		newArr[2][2][1] = newArr[3][2][1];
-		newArr[2][2][2] = newArr[3][2][2];
-		newArr[3][2][0] = newArr[4][2][0];
-		newArr[3][2][1] = newArr[4][2][1];
-		newArr[3][2][2] = newArr[4][2][2];
-		newArr[4][2][0] = temp[0];
-		newArr[4][2][1] = temp[1];
-		newArr[4][2][2] = temp[2];
-		rst.push(newArr);
-	}
-
-	// 2를 회전
-	for (let i = 0; i < 3; i++) {
-		let newArr = i == 0 ? arr.map((v) => [...v]) : rst[rst.length - 1].map((v) => [...v]);
-		const temp = [...newArr[0][2]];
-		newArr[0][2][0] = newArr[3][0][0];
-		newArr[0][2][1] = newArr[3][1][0];
-		newArr[0][2][2] = newArr[3][2][0];
-
-		newArr[3][0][0] = newArr[5][0][2];
-		newArr[3][1][0] = newArr[5][0][1];
-		newArr[3][2][0] = newArr[5][0][0];
-
-		newArr[5][0][2] = newArr[1][2][2];
-		newArr[5][0][1] = newArr[1][1][2];
-		newArr[5][0][0] = newArr[1][0][2];
-
-		newArr[1][0][2] = temp[2];
-		newArr[1][1][2] = temp[1];
-		newArr[1][2][2] = temp[0];
-
-		rst.push(newArr);
-	}
-
-	//3 을 회전
-	for (let i = 0; i < 3; i++) {
-		let newArr = i == 0 ? arr.map((v) => [...v]) : rst[rst.length - 1].map((v) => [...v]);
-
-		const temp = [newArr[0][2][2], newArr[0][1][2], newArr[0][0][2]];
-
-		newArr[0][2][2] = newArr[4][0][0];
-		newArr[0][1][2] = newArr[4][1][0];
-		newArr[0][0][2] = newArr[4][2][0];
-
-		newArr[4][0][0] = newArr[5][2][2];
-		newArr[4][1][0] = newArr[5][1][2];
-		newArr[4][2][0] = newArr[5][0][2];
-
-		newArr[5][2][2] = newArr[2][2][2];
-		newArr[5][1][2] = newArr[2][1][2];
-		newArr[5][0][2] = newArr[2][0][2];
-
-		newArr[2][0][2] = temp[2];
-		newArr[2][1][2] = temp[1];
-		newArr[2][2][2] = temp[0];
-		rst.push(newArr);
-	}
-
-	// 1을 회전
-	for (let i = 0; i < 3; i++) {
-		let newArr = i == 0 ? arr.map((v) => [...v]) : rst[rst.length - 1].map((v) => [...v]);
-
-		const temp = [newArr[4][0][2], newArr[4][1][2], newArr[4][2][2]];
-
-		newArr[4][0][2] = newArr[0][2][0];
-		newArr[4][1][2] = newArr[0][1][0];
-		newArr[4][2][2] = newArr[0][0][0];
-
-		newArr[0][0][0] = newArr[2][0][0];
-		newArr[0][1][0] = newArr[2][1][0];
-		newArr[0][2][0] = newArr[2][2][0];
-
-		newArr[2][0][0] = newArr[5][0][0];
-		newArr[2][1][0] = newArr[5][1][0];
-		newArr[2][2][0] = newArr[5][2][0];
-
-		newArr[5][0][0] = temp[2];
-		newArr[5][1][0] = temp[1];
-		newArr[5][2][0] = temp[0];
-
-		rst.push(newArr);
-	}
-
-	//4를 회전
-	for (let i = 0; i < 3; i++) {
-		let newArr = i == 0 ? arr.map((v) => [...v]) : rst[rst.length - 1].map((v) => [...v]);
-
-		const temp = [newArr[3][0][2], newArr[3][1][2], newArr[3][2][2]];
-
-		newArr[3][0][2] = newArr[0][0][0];
-		newArr[3][1][2] = newArr[0][0][1];
-		newArr[3][2][2] = newArr[0][0][2];
-
-		newArr[0][0][0] = newArr[1][2][0];
-		newArr[0][0][1] = newArr[1][1][0];
-		newArr[0][0][2] = newArr[1][0][0];
-
-		newArr[1][0][0] = newArr[5][2][0];
-		newArr[1][1][0] = newArr[5][2][1];
-		newArr[1][2][0] = newArr[5][2][2];
-
-		newArr[5][2][0] = temp[2];
-		newArr[5][2][1] = temp[1];
-		newArr[5][2][2] = temp[0];
-
-		rst.push(newArr);
-	}
-
-	return rst;
-}
+const position = [
+	[0, 0],
+	[0, 1],
+	[0, 2],
+	[1, 0],
+	[1, 1],
+	[1, 2],
+	[2, 0],
+	[2, 1],
+	[2, 2],
+];
 
 function getPossibleSynergy() {
-	const position = [
-		[-1, -1],
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-	];
-
-	const dx = [0, 0, -1, 1];
-	const dy = [-1, 1, 0, 0];
 	const answer = [];
-	for (let a = 1; a <= 9; a++) {
-		for (let b = a + 1; b <= 9; b++) {
-			for (let c = b + 1; c <= 9; c++) {
-				for (let d = c + 1; d <= 9; d++) {
-					for (let e = d + 1; e <= 9; e++) {
+	for (let a = 0; a < 9; a++) {
+		for (let b = a + 1; b < 9; b++) {
+			for (let c = b + 1; c < 9; c++) {
+				for (let d = c + 1; d < 9; d++) {
+					for (let e = d + 1; e < 9; e++) {
 						const items = [a, b, c, d, e];
 						const check = Array.from(Array(3), () => Array(3).fill(false));
 						items.forEach((v) => {
@@ -711,8 +746,8 @@ function getPossibleSynergy() {
 										const [x, y] = q.shift();
 
 										for (let k = 0; k < 4; k++) {
-											const nx = x + dx[k];
-											const ny = y + dy[k];
+											const nx = x + ddx[k];
+											const ny = y + ddy[k];
 											if (nx < 0 || nx >= 3) continue;
 											if (ny < 0 || ny >= 3) continue;
 											if (check[nx][ny]) {
@@ -755,7 +790,7 @@ function getValueOfNumber(arr) {
 	}
 
 	von = von.sort((a, b) => a - b);
-	return von[0] + von[1] + von[5];
+	return BigInt(von[0] + von[1] + von[5]);
 }
 
 function getValueOfNeighbor(arr) {
@@ -778,7 +813,7 @@ function getValueOfNeighbor(arr) {
 
 		valueOfNeighbor *= cnt;
 	}
-	return valueOfNeighbor;
+	return BigInt(valueOfNeighbor);
 }
 
 function getValueOfSynergy(arr) {
@@ -803,34 +838,45 @@ function getValueOfSynergy(arr) {
 					);
 
 					for (let k = 0; k < K.length; k++) {
-						if (K[k] % num == 0n) s.add(Number(num));
+						if (K[k] % num == 0n) s.add(BigInt(num));
 					}
 				});
 				return (
-					s.size * s.size +
+					BigInt(s.size * s.size) +
 					[...s].reduce((r, v) => {
 						r += v;
 						return r;
-					}, 0)
+					}, BigInt(0))
 				);
 			})
-			.sort((a, b) => a - b);
+			.sort((a, b) => Number(a - b));
 		vos.push(synergy[0] + synergy[48] + synergy[24]);
 	}
 
-	const vos1 = Number(vos[0] + vos[1] + vos[2]);
-	const vos2 = Number(vos[0] + vos[3] + vos[2]);
-	const vos3 = Number(vos[0] + vos[1] + vos[4]);
-	const vos4 = Number(vos[0] + vos[3] + vos[4]);
-	const vos5 = Number(vos[5] + vos[1] + vos[2]);
-	const vos6 = Number(vos[5] + vos[3] + vos[2]);
-	const vos7 = Number(vos[5] + vos[1] + vos[4]);
-	const vos8 = Number(vos[5] + vos[3] + vos[4]);
-	return Math.max(vos1, vos2, vos3, vos4, vos5, vos6, vos7, vos8);
+	const vos1 = vos[0] + vos[1] + vos[2];
+	const vos2 = vos[0] + vos[3] + vos[2];
+	const vos3 = vos[0] + vos[1] + vos[4];
+	const vos4 = vos[0] + vos[3] + vos[4];
+	const vos5 = vos[5] + vos[1] + vos[2];
+	const vos6 = vos[5] + vos[3] + vos[2];
+	const vos7 = vos[5] + vos[1] + vos[4];
+	const vos8 = vos[5] + vos[3] + vos[4];
+
+	let max = BigInt(0);
+	if (vos1 > max) max = vos1;
+	if (vos2 > max) max = vos2;
+	if (vos3 > max) max = vos3;
+	if (vos4 > max) max = vos4;
+	if (vos5 > max) max = vos5;
+	if (vos6 > max) max = vos6;
+	if (vos7 > max) max = vos7;
+	if (vos8 > max) max = vos8;
+
+	return max;
 }
 
 function getValueOfMine(arr) {
-	const vom = [0, 0, 0, 0, 0, 0];
+	let vom = [0, 0, 0, 0, 0, 0];
 	for (let i = 0; i < 6; i++) {
 		const target = arr[i];
 		for (let x = 0; x < 3; x++) {
@@ -866,53 +912,46 @@ function getValueOfMine(arr) {
 	const vom34 = vom[4] * vom[3];
 	const vom41 = vom[1] * vom[4];
 
-	return vom01 + vom02 + vom03 + vom04 + vom51 + vom52 + vom53 + vom54 + vom12 + vom23 + vom34 + vom41;
+	return BigInt(vom01 + vom02 + vom03 + vom04 + vom51 + vom52 + vom53 + vom54 + vom12 + vom23 + vom34 + vom41);
 }
+
+const BISHOP = [
+	0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 1, 2, 2, 3, 2, 3, 1, 1, 2, 2, 1, 2, 2, 3, 2, 2, 2, 2, 2, 3, 2, 3, 1, 2, 1, 2, 2,
+	3, 2, 3, 2, 3, 2, 3, 3, 4, 3, 4, 2, 2, 2, 2, 2, 3, 2, 3, 3, 3, 3, 3, 3, 4, 3, 4, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
+	2, 3, 2, 3, 2, 3, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 3, 4, 3, 4, 3, 4, 3,
+	4, 2, 3, 2, 3, 2, 3, 2, 3, 3, 4, 3, 4, 3, 4, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 2, 3, 3,
+	2, 3, 3, 4, 2, 2, 3, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 2, 3, 3, 4, 3, 4, 2, 2, 3, 3, 2, 3, 3, 4, 3,
+	3, 3, 3, 3, 4, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3,
+	3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 1, 1, 2,
+	2, 2, 2, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 1, 1, 2, 2, 2, 2, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3,
+	3, 3, 3, 3, 4, 4, 4, 4, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 2, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3,
+	3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 3, 3, 3, 3, 4, 4, 2, 2, 3, 3, 3, 3, 4, 4, 2, 2, 3, 3, 3, 3, 4,
+	4, 2, 2, 3, 3, 3, 3, 4, 4, 2, 2, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 2, 2, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3,
+	4, 4, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3,
+	3, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+];
 
 function getValueOfChess(dice) {
 	let valueOfChess = 0;
 	for (let i = 0; i < 6; i++) {
-		const target = dice[i];
-
-		const cross = Array.from(Array(2 * 3), () => []);
-
-		for (let a = 0; a < 3; a++) {
-			for (let b = 0; b < 3; b++) {
-				if (target[a][b] % 2 == 0) cross[a + b].push([a, b]);
-			}
-		}
-		let visited = Array.from(Array(2 * 3), () => false);
-		let max = 0;
-
-		function chessDfs(n, cnt) {
-			if (max >= cnt + Math.ceil((2 * 3 - 1 - n) / 2)) return;
-
-			if (n >= 2 * 3 - 1) {
-				max = Math.max(cnt, max);
-				return;
-			}
-
-			cross[n].forEach(([i, j]) => {
-				// console.log(i - j + N);
-				if (visited[i - j + 3] == false) {
-					visited[i - j + 3] = true;
-					chessDfs(n + 2, cnt + 1);
-					visited[i - j + 3] = false;
+		const target = dice[i]
+			.flat()
+			.map((v) => {
+				if (v % 2 == 0) {
+					return 1;
+				} else {
+					return 0;
 				}
-			});
-			chessDfs(n + 2, cnt);
-		}
-
-		chessDfs(0, 0);
-		valueOfChess += max;
-		chessDfs(1, 0);
-		valueOfChess += max;
+			})
+			.join('');
+		valueOfChess += BISHOP[parseInt(target, 2)];
 	}
-	return valueOfChess;
+	return BigInt(valueOfChess);
 }
 
 function getValueOfCube(a, b, c, d, e) {
-	return (a + b + c + d + e) % 20010610;
+	return Number((a + b + c + d + e) % BigInt(20010610));
 }
 
 const valueOfCubes = standardDice.map((v) => {
@@ -921,64 +960,63 @@ const valueOfCubes = standardDice.map((v) => {
 		.filter((v) => v != -1)
 		.map((v) => partsOfDice[v]);
 
-	const valueOfNumber = getValueOfNumber(planeIndexes);
-	console.log('valueOfNumber', valueOfNumber);
-	// 이웃의 가치
-	const valueOfNeighbor = getValueOfNeighbor(planeIndexes);
-	console.log('valueOfNeighbor', valueOfNeighbor);
+	const rotatedDice = getrotatedDice(planeIndexes);
+	const caseOfRotate = rotatedDice.map((dice) => {
+		// 숫자의 가치
+		const valueOfNumber = getValueOfNumber(dice);
+		// console.log('valueOfNumber', valueOfNumber);
+		// 이웃의 가치
+		const valueOfNeighbor = getValueOfNeighbor(dice);
+		// console.log('valueOfNeighbor', valueOfNeighbor);
 
-	// 시너지의 가치
-	const valueOfSynergy = getValueOfSynergy(planeIndexes);
-	console.log('valueOfSynergy', valueOfSynergy);
+		// 시너지의 가치
+		const valueOfSynergy = getValueOfSynergy(dice);
+		// console.log('valueOfSynergy', valueOfSynergy);
 
-	// 지뢰찾기 가치
-	const valueOfMine = getValueOfMine(planeIndexes);
-	console.log('valueOfMine', valueOfMine);
+		// 지뢰찾기 가치
+		const valueOfMine = getValueOfMine(dice);
+		// console.log('valueOfMine', valueOfMine);
 
-	// 체스의 가치
-	const valueOfChess = getValueOfChess(planeIndexes);
-	console.log('valueOfChess', valueOfNumber);
-	console.log('==========');
-	// 큐브의 가치
-	const valueOfCube = getValueOfCube(valueOfChess, valueOfMine, valueOfSynergy, valueOfNeighbor, valueOfNumber);
-	return valueOfCube;
-	// const rotatedDice = rotate18(planeIndexes);
-	// const caseOfRotate = rotatedDice.map((dice) => {
-	// 	// 숫자의 가치
-	// 	const valueOfNumber = getValueOfNumber(dice);
-	// 	// console.log('valueOfNumber', valueOfNumber);
-	// 	// 이웃의 가치
-	// 	const valueOfNeighbor = getValueOfNeighbor(dice);
-	// 	// console.log('valueOfNeighbor', valueOfNeighbor);
+		// 체스의 가치
+		const valueOfChess = getValueOfChess(dice);
+		// console.log('valueOfChess', valueOfNumber);
 
-	// 	// 시너지의 가치
-	// 	const valueOfSynergy = getValueOfSynergy(dice);
-	// 	// console.log('valueOfSynergy', valueOfSynergy);
+		// 큐브의 가치
+		const valueOfCube = getValueOfCube(
+			valueOfChess,
+			valueOfMine,
+			valueOfSynergy,
+			valueOfNeighbor,
+			valueOfNumber
+		);
 
-	// 	// 지뢰찾기 가치
-	// 	const valueOfMine = getValueOfMine(dice);
-	// 	// console.log('valueOfMine', valueOfMine);
+		return valueOfCube;
+	});
+	const first = caseOfRotate[0];
 
-	// 	// 체스의 가치
-	// 	const valueOfChess = getValueOfChess(dice);
-	// 	// console.log('valueOfChess', valueOfNumber);
-
-	// 	// 큐브의 가치
-	// 	const valueOfCube = getValueOfCube(
-	// 		valueOfChess,
-	// 		valueOfMine,
-	// 		valueOfSynergy,
-	// 		valueOfNeighbor,
-	// 		valueOfNumber
-	// 	);
-
-	// 	return valueOfCube;
-	// });
-	// console.log(caseOfRotate);
-	// const first = caseOfRotate.shift();
-	// const max = Math.max(...caseOfRotate);
-	// return [first, max];
+	let max = 0;
+	for (let i = 1; i < 19; i++) {
+		if (caseOfRotate[i] > max) max = caseOfRotate[i];
+	}
+	return [first, max];
 });
 
-console.log(valueOfCubes[0] + valueOfCubes[1], 4341321);
-console.log(valueOfCubes[0] + valueOfCubes[1] == 4341321);
+const valueOfCubesSorted = valueOfCubes.sort((a, b) => {
+	const diffA = a[1] - a[0];
+	const diffB = b[1] - b[0];
+	return diffB - diffA;
+});
+
+const answer = [];
+const P = valueOfCubesSorted.length;
+for (let i = 0; i <= P; i++) {
+	let sum = 0;
+	for (let j = 0; j < i; j++) {
+		sum += valueOfCubesSorted[j][1];
+	}
+	for (let k = i; k < P; k++) {
+		sum += valueOfCubesSorted[k][0];
+	}
+	answer.push(sum);
+}
+console.log(answer.join('\n'));
