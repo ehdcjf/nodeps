@@ -1,5 +1,6 @@
-//Nice Cube Price
+// console.time('ddd');
 
+//Nice Cube Price
 class Node {
 	constructor(item) {
 		this.item = item;
@@ -34,6 +35,369 @@ class Queue {
 	}
 }
 
+const possibleSynergy = [
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[2, 0],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[1, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[2, 0],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 0],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 1],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[2, 0],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 2],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+	],
+	[
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 2],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 2],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 2],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 2],
+	],
+	[
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[1, 0],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[1, 0],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+];
+
+const possibleNum = [];
+
+function possibleNumDfs(arr) {
+	if (arr.length == 5) {
+		possibleNum.push(arr);
+		return;
+	} else {
+		for (let i = 0; i < 5; i++) {
+			if (!arr.includes(i)) {
+				possibleNumDfs([...arr, i]);
+			}
+		}
+	}
+}
+
+possibleNumDfs([]);
+
 const input = require('fs')
 	.readFileSync('./dev/stdin')
 	.toString()
@@ -53,7 +417,153 @@ const K = input
 	.split(' ')
 	.map((v) => BigInt(v));
 
+// const K = [
+// 	'358845337212887578',
+// 	'744258161128681717',
+// 	'174366162495847559',
+// 	'299532576696613754',
+// 	'249241735643126563',
+// 	'726614748184524775',
+// 	'784625319854366126',
+// 	'712498846183298498',
+// 	'248736632767176394',
+// 	'853569272662363813',
+// 	'254414293828319637',
+// 	'334278943134217181',
+// 	'977763282771572228',
+// 	'364194225215948875',
+// 	'819532298819874889',
+// 	'971438174898939171',
+// 	'416751918519874835',
+// 	'892768267198957247',
+// 	'882992217351331112',
+// 	'175391588523474983',
+// 	'594311484325374171',
+// 	'939385273332662657',
+// 	'425932917128648532',
+// 	'413224365348519144',
+// 	'946973877312314351',
+// 	'978228757827797649',
+// 	'943778735668184353',
+// 	'423444186474725522',
+// 	'821211425447144153',
+// 	'344237624717116286',
+// 	'538335279279952194',
+// 	'536249793942372897',
+// 	'554876743675268729',
+// 	'411454945822677296',
+// 	'464276435566822746',
+// 	'282739926427681498',
+// 	'933299161673168843',
+// 	'598129323771489583',
+// 	'818446176834463488',
+// 	'885872198947827875',
+// 	'927132843862163123',
+// 	'157415653616581748',
+// 	'215345278143651819',
+// 	'491487425526435274',
+// 	'471375375812861563',
+// 	'748617987627964374',
+// 	'374788232782269589',
+// 	'452933628299756822',
+// 	'216481852544544521',
+// 	'254363757199126194',
+// 	'227737125565166816',
+// 	'983453221317563738',
+// 	'816582438571997275',
+// 	'357777412715977555',
+// 	'583546463148713648',
+// 	'852855551286399617',
+// 	'515857672469794833',
+// 	'454914341762871381',
+// 	'674351519164418644',
+// 	'471698519892218475',
+// 	'536273313768937951',
+// 	'687948272115628228',
+// 	'836727933697393553',
+// 	'226532552269735154',
+// 	'123273615974558325',
+// 	'767153675151983228',
+// 	'628462868662785217',
+// 	'783492513791316963',
+// 	'116373434798434869',
+// 	'471955499446425942',
+// 	'852399171292292557',
+// 	'434955775894464355',
+// 	'658465931324146856',
+// 	'683876329421284445',
+// 	'517843814286428198',
+// 	'899146629597766946',
+// 	'117316267259575992',
+// 	'911896696966879581',
+// 	'323958798918636482',
+// 	'829217689623623862',
+// 	'221827886436231312',
+// 	'596771428865716438',
+// 	'468252473544728179',
+// 	'477528315328475528',
+// 	'193129938895563613',
+// 	'798365673713964985',
+// 	'676291531993847435',
+// 	'933326717268559511',
+// 	'482118136583947198',
+// 	'315552126496175291',
+// 	'142287745121592958',
+// 	'286548588614672228',
+// 	'722666641769446656',
+// 	'327438936538464458',
+// 	'936269224634335844',
+// 	'169881869177645484',
+// 	'567663967425472854',
+// 	'889447646181772655',
+// 	'897842277437152596',
+// 	'532623235421873351',
+// ];
+
 let board = input.map((v) => v.trim().split(''));
+
+const possibleSynergyNum = new Set();
+for (let i = 11111; i <= 99999; i++) {
+	for (let k = 0; k < K.length; k++) {
+		if (BigInt(K[k]) % BigInt(i) == 0) {
+			possibleSynergyNum.add(BigInt(i));
+			break;
+		}
+	}
+}
+const synergyValues = Array(100000).fill(0);
+
+for (let i = 1; i <= 9; i++) {
+	for (let j = i; j <= 9; j++) {
+		for (let k = j; k <= 9; k++) {
+			for (let l = k; l <= 9; l++) {
+				for (let m = l; m <= 9; m++) {
+					const tmp = [i, j, k, l, m];
+					let s = new Set();
+					possibleNum.forEach((v2) => {
+						const num = BigInt(
+							v2.reduce((r, v) => {
+								r += `${tmp[v]}`;
+								return r;
+							}, '')
+						);
+						if (possibleSynergyNum.has(num)) {
+							s.add(num);
+						}
+					});
+
+					const index = i * 10000 + j * 1000 + k * 100 + l * 10 + m;
+					synergyValues[index] =
+						BigInt(s.size * s.size) +
+						[...s].reduce((r, v) => {
+							r += v;
+							return r;
+						}, BigInt(0));
+				}
+			}
+		}
+	}
+}
 
 const standardDice = [];
 // 위, 아래, 왼쪽, 오른쪽
@@ -230,127 +740,128 @@ function isPartOfDice(i, j) {
 
 const transformDiceToFirstDicePattern = [
 	//0
-	(arr, r) => [
-		[-1, arr[0][1] + (r % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][1] + (r % 4), -1, -1],
+	(arr) => [
+		['', arr[0][1], '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
 	],
 	//1
-	(arr, r) => [
-		[-1, arr[0][0] + ((r + 1) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][0] + ((r + 3) % 4), -1, -1],
+	(arr) => [
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts270(arr[2][0]), '', ''],
 	],
 	//2
-	(arr, r) => [
-		[-1, arr[0][1] + (r % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][0] + ((r + 3) % 4), -1, -1],
+	(arr) => [
+		['', arr[0][1], '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts270(arr[2][0]), '', ''],
 	],
 	//3
-	(arr, r) => [
-		[-1, arr[0][0] + ((r + 1) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][0] + (r % 4), -1, -1],
+	(arr) => [
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
 	],
 	//4
 	(arr, r) => [
-		[-1, arr[0][2] + ((r + 3) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][0] + ((r + 3) % 4), -1, -1],
+		['', rotateParts270(arr[0][2]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts270(arr[2][0]), '', ''],
 	],
 	//5
 	(arr, r) => [
-		[-1, arr[0][0] + ((r + 1) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][2] + ((r + 1) % 4), -1, -1],
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts90(arr[2][2]), '', ''],
 	],
 	//6
 	(arr, r) => [
-		[-1, arr[0][3] + ((r + 2) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][0] + ((r + 3) % 4), -1, -1],
+		['', rotateParts180(arr[0][3]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts270(arr[2][0]), '', ''],
 	],
 	//7
 	(arr, r) => [
-		[-1, arr[0][0] + ((r + 1) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][3] + ((r + 2) % 4), -1, -1],
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts180(arr[2][3]), '', ''],
 	],
 	//8
 	(arr, r) => [
-		[-1, arr[0][2] + ((r + 3) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][1] + (r % 4), -1, -1],
+		['', rotateParts270(arr[0][2]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
 	],
 	//9
 	(arr, r) => [
-		[-1, arr[0][2] + (r % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][2] + ((r + 1) % 4), -1, -1],
+		['', arr[0][1], '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts90(arr[2][2]), '', ''],
 	],
 	//10
-	(arr, r) => [
-		[-1, arr[0][2] + ((r + 3) % 4), -1, -1],
-		[arr[2][0] + ((r + 1) % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[0][3] + ((r + 1) % 4)],
-		[-1, arr[2][1] + (r % 4), -1, -1],
+	(arr) => [
+		['', rotateParts270(arr[0][2]), '', ''],
+		[rotateParts90(arr[2][0]), arr[1][1], arr[1][2], rotateParts90(arr[0][3])],
+		['', arr[2][1], '', ''],
 	],
 	//11
-	(arr, r) => [
-		[-1, arr[0][1] + (r % 4), -1, -1],
-		[arr[0][0] + ((r + 3) % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[2][3] + ((r + 3) % 4)],
-		[-1, arr[2][2] + ((r + 1) % 4), -1, -1],
+	(arr) => [
+		['', arr[0][1], '', ''],
+		[rotateParts270(arr[0][0]), arr[1][1], arr[1][2], rotateParts270(arr[2][3])],
+		['', rotateParts90(arr[2][2]), '', ''],
 	],
 	//12
-	(arr, r) => [
-		[-1, arr[0][2] + ((r + 3) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[0][3] + ((r + 1) % 4)],
-		[-1, arr[2][0] + ((r + 3) % 4), -1, -1],
+	(arr) => [
+		['', rotateParts270(arr[0][2]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], rotateParts90(arr[0][3])],
+		['', rotateParts270(arr[2][0]), '', ''],
 	],
 	//13
 	(arr, r) => [
-		[-1, arr[0][0] + ((r + 1) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[2][3] + ((r + 3) % 4)],
-		[-1, arr[2][2] + ((r + 1) % 4), -1, -1],
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], rotateParts270(arr[2][3])],
+		['', rotateParts90(arr[2][2]), '', ''],
 	],
 
 	//14
 	(arr, r) => [
-		[-1, arr[0][1] + (r % 4), -1, -1],
-		[arr[2][0] + ((r + 1) % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][1] + (r % 4), -1, -1],
+		['', arr[0][1], '', ''],
+		[rotateParts90(arr[2][0]), arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
 	],
 	//15
 	(arr, r) => [
-		[-1, arr[0][1] + (r % 4), -1, -1],
-		[arr[0][0] + ((r + 3) % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4)],
-		[-1, arr[2][1] + (r % 4), -1, -1],
+		['', arr[0][1], '', ''],
+		[rotateParts270(arr[0][0]), arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
 	],
-	//16
 
+	//16
 	(arr, r) => [
-		[-1, arr[0][1] + (r % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[2][3] + ((r + 3) % 4)],
-		[-1, arr[2][2] + ((r + 1) % 4), -1, -1],
+		['', arr[0][1], '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], rotateParts270(arr[2][3])],
+		['', rotateParts90(arr[2][2]), '', ''],
 	],
 
 	//17
 	(arr, r) => [
-		[-1, arr[0][2] + ((r + 3) % 4), -1, -1],
-		[arr[1][0] + (r % 4), arr[1][1] + (r % 4), arr[1][2] + (r % 4), arr[0][3] + ((r + 1) % 4)],
-		[-1, arr[2][1] + (r % 4), -1, -1],
+		['', rotateParts270(arr[0][2]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], rotateParts270(arr[0][3])],
+		['', arr[2][1], '', ''],
 	],
 
-	(arr, r) => [
-		[-1, arr[1][0] + ((r + 2) % 4), -1, -1],
-		[arr[1][1] + ((r + 1) % 4), arr[0][2] + (r % 4), arr[0][3] + (r % 4), arr[0][4] + (r % 4)],
-		[-1, arr[1][2] + (r % 4), -1, -1],
+	//18
+	(arr) => [
+		['', rotateParts180(arr[1][0]), '', ''],
+		[rotateParts90(arr[1][1]), arr[0][2], arr[0][3], arr[0][4]],
+		['', arr[1][2], '', ''],
 	],
-
-	(arr, r) => [
-		[-1, arr[0][2] + (r % 4), -1, -1],
-		[arr[0][1] + ((r + 3) % 4), arr[1][2] + (r % 4), arr[1][3] + (r % 4), arr[1][4] + (r % 4)],
-		[-1, arr[0][0] + ((r + 2) % 4), -1, -1],
+	//19
+	(arr) => [
+		['', arr[0][2], '', ''],
+		[rotateParts270(arr[0][1]), arr[1][2], arr[1][3], arr[1][4]],
+		['', rotateParts180(arr[0][0]), '', ''],
 	],
 ];
 
@@ -530,18 +1041,20 @@ function getrotatedDice(dice) {
 	];
 }
 
-const partsOfDice = [];
+function rotateParts90(str) {
+	return str[6] + str[3] + str[0] + str[7] + str[4] + str[1] + str[8] + str[5] + str[2];
+}
+function rotateParts180(str) {
+	return str[8] + str[7] + str[6] + str[5] + str[4] + str[3] + str[2] + str[1] + str[0];
+}
+function rotateParts270(str) {
+	return str[2] + str[5] + str[8] + str[1] + str[4] + str[7] + str[0] + str[3] + str[6];
+}
 
-function getPartsIndex(i, j) {
-	const plane = [
-		[+board[i + 1][j + 1], +board[i + 1][j + 2], +board[i + 1][j + 3]],
-		[+board[i + 2][j + 1], +board[i + 2][j + 2], +board[i + 2][j + 3]],
-		[+board[i + 3][j + 1], +board[i + 3][j + 2], +board[i + 3][j + 3]],
-	];
-	rotate(plane).forEach((v) => {
-		partsOfDice.push(v);
-	});
-	return partsOfDice.length - 4;
+function getParts(i, j) {
+	return `${board[i + 1][j + 1]}${board[i + 1][j + 2]}${board[i + 1][j + 3]}${board[i + 2][j + 1]}${
+		board[i + 2][j + 2]
+	}${board[i + 2][j + 3]}${board[i + 3][j + 1]}${board[i + 3][j + 2]}${board[i + 3][j + 3]}`;
 }
 
 function checkDicePattern(pattern, dice) {
@@ -549,7 +1062,7 @@ function checkDicePattern(pattern, dice) {
 	const c = pattern[0].length;
 	for (let i = 0; i < r; i++) {
 		for (let j = 0; j < c; j++) {
-			if ((pattern[i][j] == 1 && dice[i][j] == -1) || (pattern[i][j] == 0 && dice[i][j] >= 0))
+			if ((pattern[i][j] == 1 && dice[i][j] == '') || (pattern[i][j] == 0 && dice[i][j] != ''))
 				return false;
 		}
 	}
@@ -560,10 +1073,13 @@ function beStandardDicePattern(arr, cnt) {
 	while (cnt < 4) {
 		const r = arr.length;
 		const c = arr[0].length;
-		let rotated = Array.from(Array(c), () => Array(r).fill(-1));
+		let rotated = Array.from(Array(c), () => Array(r).fill(''));
 		for (let i = 0; i < r; i++) {
 			for (let j = 0; j < c; j++) {
-				rotated[j][r - i - 1] = arr[i][j];
+				if (arr[i][j] != '') {
+					const rotateParts = rotateParts90(arr[i][j]);
+					rotated[j][r - i - 1] = rotateParts;
+				}
 			}
 		}
 		arr = rotated;
@@ -571,12 +1087,12 @@ function beStandardDicePattern(arr, cnt) {
 	}
 	return arr;
 }
-
+// console.time('find');
 for (let i = 0; i < H; i++) {
 	for (let j = 0; j < W; j++) {
 		if (isPartOfDice(i, j)) {
-			let dice = Array.from(Array(9), () => Array(9).fill(-1));
-			dice[4][4] = getPartsIndex(i, j);
+			let dice = Array.from(Array(9), () => Array(9).fill(''));
+			dice[4][4] = getParts(i, j);
 			board[i + 1][j + 1] = 'o';
 
 			const q = new Queue();
@@ -591,7 +1107,7 @@ for (let i = 0; i < H; i++) {
 					const ndy = diceY + ddy[k];
 
 					if (isPartOfDice(nbx, nby)) {
-						dice[ndx][ndy] = getPartsIndex(nbx, nby);
+						dice[ndx][ndy] = getParts(nbx, nby);
 						board[nbx + 1][nby + 1] = 'o';
 						q.push([nbx, nby, ndx, ndy]);
 					}
@@ -601,7 +1117,7 @@ for (let i = 0; i < H; i++) {
 			while (dice.length > 0) {
 				let zero = true;
 				for (let k = 0; k < dice[0].length; k++) {
-					if (dice[0][k] >= 0) {
+					if (dice[0][k] != '') {
 						zero = false;
 						break;
 					}
@@ -615,7 +1131,7 @@ for (let i = 0; i < H; i++) {
 			while (dice.length > 0) {
 				let zero = true;
 				for (let k = 0; k < dice[0].length; k++) {
-					if (dice[dice.length - 1][k] >= 0) {
+					if (dice[dice.length - 1][k] != '') {
 						zero = false;
 						break;
 					}
@@ -630,7 +1146,7 @@ for (let i = 0; i < H; i++) {
 			while (true) {
 				let zero = true;
 				for (let i = 0; i < dice.length; i++) {
-					if (dice[i][0] >= 0) {
+					if (dice[i][0] != '') {
 						zero = false;
 						break;
 					}
@@ -647,7 +1163,7 @@ for (let i = 0; i < H; i++) {
 			while (true) {
 				let zero = true;
 				for (let i = 0; i < dice.length; i++) {
-					if (dice[i][dice[i].length - 1] >= 0) {
+					if (dice[i][dice[i].length - 1] != '') {
 						zero = false;
 						break;
 					}
@@ -672,11 +1188,9 @@ for (let i = 0; i < H; i++) {
 					const diceRow = dice.length;
 					const diceColumn = dice[0].length;
 					if (patternRow != diceRow || patternColumn != diceColumn) continue;
-
 					if (checkDicePattern(pattern, dice)) {
 						const result = transformDiceToFirstDicePattern[i](
-							beStandardDicePattern(dice),
-							4 - j
+							beStandardDicePattern(dice, j)
 						);
 						standardDice.push(result);
 						findPattern = true;
@@ -687,94 +1201,10 @@ for (let i = 0; i < H; i++) {
 		}
 	}
 }
-
+// console.timeEnd('find');
+// console.log(standardDice);
 // 이제 18번 돌린거 구하고..
 // 거기서 무슨무슨 가치 구하면됨.
-
-const possibleNum = [];
-
-function possibleNumDfs(arr) {
-	if (arr.length == 5) {
-		possibleNum.push(arr);
-		return;
-	} else {
-		for (let i = 0; i < 5; i++) {
-			if (!arr.includes(i)) {
-				possibleNumDfs([...arr, i]);
-			}
-		}
-	}
-}
-
-possibleNumDfs([]);
-
-const position = [
-	[0, 0],
-	[0, 1],
-	[0, 2],
-	[1, 0],
-	[1, 1],
-	[1, 2],
-	[2, 0],
-	[2, 1],
-	[2, 2],
-];
-
-function getPossibleSynergy() {
-	const answer = [];
-	for (let a = 0; a < 9; a++) {
-		for (let b = a + 1; b < 9; b++) {
-			for (let c = b + 1; c < 9; c++) {
-				for (let d = c + 1; d < 9; d++) {
-					for (let e = d + 1; e < 9; e++) {
-						const items = [a, b, c, d, e];
-						const check = Array.from(Array(3), () => Array(3).fill(false));
-						items.forEach((v) => {
-							const [x, y] = position[v];
-							check[x][y] = true;
-						});
-
-						let possible = false;
-						for (let i = 0; i < 3; i++) {
-							for (let j = 0; j < 3; j++) {
-								if (check[i][j]) {
-									let q = [];
-									q.push([i, j]);
-									check[i][j] = false;
-									let cnt = 1;
-									while (q.length > 0) {
-										const [x, y] = q.shift();
-
-										for (let k = 0; k < 4; k++) {
-											const nx = x + ddx[k];
-											const ny = y + ddy[k];
-											if (nx < 0 || nx >= 3) continue;
-											if (ny < 0 || ny >= 3) continue;
-											if (check[nx][ny]) {
-												q.push([nx, ny]);
-												check[nx][ny] = false;
-												cnt++;
-											}
-										}
-									}
-									if (cnt == 5) possible = true;
-								}
-							}
-						}
-
-						if (possible) {
-							answer.push(items);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return answer.map((v) => v.map((x) => position[x]));
-}
-
-const possibleSynergy = getPossibleSynergy();
 
 function getValueOfNumber(arr) {
 	let von = [];
@@ -822,32 +1252,16 @@ function getValueOfSynergy(arr) {
 		const target = arr[i];
 		const synergy = possibleSynergy
 			.map((v) => {
-				const list = [];
+				let list = [];
 				v.forEach(([x, y]) => {
 					list.push(target[x][y]);
 				});
 
-				let s = new Set();
+				list = list.sort((a, b) => a - b);
 
-				possibleNum.forEach((v2) => {
-					const num = BigInt(
-						v2.reduce((r, i) => {
-							r += `${list[i]}`;
-							return r;
-						}, '')
-					);
+				const index = list[0] * 10000 + list[1] * 1000 + list[2] * 100 + list[3] * 10 + list[4];
 
-					for (let k = 0; k < K.length; k++) {
-						if (K[k] % num == 0n) s.add(BigInt(num));
-					}
-				});
-				return (
-					BigInt(s.size * s.size) +
-					[...s].reduce((r, v) => {
-						r += v;
-						return r;
-					}, BigInt(0))
-				);
+				return synergyValues[index];
 			})
 			.sort((a, b) => Number(a - b));
 		vos.push(synergy[0] + synergy[48] + synergy[24]);
@@ -954,33 +1368,51 @@ function getValueOfCube(a, b, c, d, e) {
 	return Number((a + b + c + d + e) % BigInt(20010610));
 }
 
+// console.time('real');
+
+const result = new Map();
 const valueOfCubes = standardDice.map((v) => {
 	const planeIndexes = v
 		.flat()
-		.filter((v) => v != -1)
-		.map((v) => partsOfDice[v]);
-
+		.filter((v) => v != '')
+		.map((str) => [
+			[+str[0], +str[1], +str[2]],
+			[+str[3], +str[4], +str[5]],
+			[+str[6], +str[7], +str[8]],
+		]);
 	const rotatedDice = getrotatedDice(planeIndexes);
 	const caseOfRotate = rotatedDice.map((dice) => {
+		const key = dice.map((v) => v.flat().join('')).join('');
+
+		if (result.has(key)) {
+			return result.get(key);
+		}
 		// 숫자의 가치
+		// console.time('valueOfNumber');
 		const valueOfNumber = getValueOfNumber(dice);
+		// console.timeEnd('valueOfNumber');
 		// console.log('valueOfNumber', valueOfNumber);
 		// 이웃의 가치
+		// console.time('valueOfNeighbor');
 		const valueOfNeighbor = getValueOfNeighbor(dice);
+		// console.timeEnd('valueOfNeighbor');
 		// console.log('valueOfNeighbor', valueOfNeighbor);
 
 		// 시너지의 가치
+		console.time('valueOfSynergy');
 		const valueOfSynergy = getValueOfSynergy(dice);
+		console.timeEnd('valueOfSynergy');
 		// console.log('valueOfSynergy', valueOfSynergy);
-
 		// 지뢰찾기 가치
+		// console.time('valueOfMine');
 		const valueOfMine = getValueOfMine(dice);
+		// console.timeEnd('valueOfMine');
 		// console.log('valueOfMine', valueOfMine);
-
 		// 체스의 가치
+		// console.time('valueOfChess');
 		const valueOfChess = getValueOfChess(dice);
+		// console.timeEnd('valueOfChess');
 		// console.log('valueOfChess', valueOfNumber);
-
 		// 큐브의 가치
 		const valueOfCube = getValueOfCube(
 			valueOfChess,
@@ -989,7 +1421,7 @@ const valueOfCubes = standardDice.map((v) => {
 			valueOfNeighbor,
 			valueOfNumber
 		);
-
+		result.set(key, valueOfCube);
 		return valueOfCube;
 	});
 	const first = caseOfRotate[0];
@@ -1000,23 +1432,27 @@ const valueOfCubes = standardDice.map((v) => {
 	}
 	return [first, max];
 });
-
-const valueOfCubesSorted = valueOfCubes.sort((a, b) => {
-	const diffA = a[1] - a[0];
-	const diffB = b[1] - b[0];
-	return diffB - diffA;
-});
+// console.timeEnd('real');
+let firstSum = 0;
+let maxSum = 0;
+const valueOfCubesSorted = valueOfCubes
+	.sort((a, b) => {
+		const diffA = a[1] - a[0];
+		const diffB = b[1] - b[0];
+		return diffB - diffA;
+	})
+	.map((v) => {
+		firstSum += v[0];
+		maxSum += v[1];
+		return [firstSum, maxSum];
+	});
+valueOfCubesSorted.unshift([0, 0]);
 
 const answer = [];
 const P = valueOfCubesSorted.length;
-for (let i = 0; i <= P; i++) {
-	let sum = 0;
-	for (let j = 0; j < i; j++) {
-		sum += valueOfCubesSorted[j][1];
-	}
-	for (let k = i; k < P; k++) {
-		sum += valueOfCubesSorted[k][0];
-	}
-	answer.push(sum);
+
+for (let i = 0; i < P; i++) {
+	answer.push(valueOfCubesSorted[i][1] + valueOfCubesSorted[P - 1][0] - valueOfCubesSorted[i][0]);
 }
 console.log(answer.join('\n'));
+// console.timeEnd('ddd');
