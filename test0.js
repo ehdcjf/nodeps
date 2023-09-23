@@ -1,35 +1,1462 @@
-// import fs from "fs";
-// const code = fs.readFileSync("./build/sweetcorn.wasm");
-const fs = require('fs');
-const code = Buffer.from(
-	`AGFzbQEAAAABYBBgAX8Bf2ACf38AYAF_AGACf38Bf2AAAGADf39_AGADf39_AX9gAn5_AX9gBH9_f38AYAN_fn8AYAN_f34Bf2AAAX9gAX4Bf2AEf35_fwBgBX9_f39_AX9gBH9_f38BfwI4Awlzd2VldGNvcm4IZmRfc3RkaW4AAANlbnYFYWJvcnQACAlzd2VldGNvcm4JZmRfc3Rkb3V0AAIDXVwBAQAAAAACAQABAgAAAAAFAgECAAABAQEBAAAAAQEKBAABAgILBAAAAAMBBQMAAQEDBgUAAAAAAwABAAUMCQkHDQcAAwAOAAIBAQABAAEBBAQIAwADBgYEAQEPBwQFAXABAQEFAwEAAQZ1Fn8AQQALfwBBAQt_AEECC38BQQALfwFBAAt_AUEAC38BQQALfwFBAAt_AUEAC38BQQALfwFBAAt_AUEAC38BQQALfwBBAAt_AEECC38AQX8LfwBBAAt_AUEAC38AQeATC38AQfwTC38BQfyTAgt_AEH8kwILBxYCCXN3ZWV0Q29ybgBaBm1lbW9yeQIACAFSCQYBAEEBCwAMARcK0TpcCQAgACABNgIECwkAIAAgATYCCAsRACAAIAAQAyAAIAAQBCAADwsHACAAKAIECw0AIAAQBkEDQX9zcQ8LCgAgABAGQQNxDwtMAQJ_IAAQSiMHIQEgARAHIQICQANAIAIgAUcEQEEBGiACEAhBA0ZFBEBBAEHAAUGgAUEQEAEACyACQRRqIAAQUSACEAchAgwBCwsLCxMAIAAgABAGQQNBf3NxIAFyEAMLBwAgACgCCAsQACAAIAEgABAGQQNxchADC2EBAn8gABAHIQEgAUEARgRAQQEaIAAQC0EARgR_IAAjFUkFQQALRQRAQQBBwAFBgAFBEhABAAsPCyAAEAshAkEBGiACRQRAQQBBwAFBhAFBEBABAAsgASACEAQgAiABEAwLBwAgACgCDAsHACAAKAIACy4BAX8jEiEBIAAgASgCAEsEQEHAAkGAA0EVQRwQAQALIAFBBGogAEEEbGoQDw8LIAEBfyAAEA4hASABQQJNBH9BAQUgARAQQSBxQQBHCw8LJQEBfyABEAshAyAAIAEgAnIQAyAAIAMQBCADIAAQDCABIAAQBAs_AQF_IAAjCEYEQCAAEAsiAUUEf0EAQcABQZQBQR4QAQAFIAELJAgLIAAQDSAAIwkgABARBH8jCkUFQQILEBILKgEBfyAARQRADwsgAEEUayECQQAaIAIQCCMKRgRAIAIQEyMGQQFqJAYLCygBAX8jFCEBAkADQCABIxVJBEAgASgCACAAEBQgAUEEaiEBDAELCwsLBwAgACgCAAsQAEEEIAAQFkEDQX9zcWoPCwkAIAAgATYCAAsJACAAIAE2AgALCQAgACABNgIECwkAIAAgATYCCAsHACAAKAIECwcAIAAoAggLBwAgACgCAAuDAwEWfyABEBYhAkEBGiACQQFxRQRAQQBB0ANBjAJBDhABAAsgAkEDQX9zcSEDQQEaIANBDE9FBEBBAEHQA0GOAkEOEAEACyADQYACSQRAQQAhBCADQQR2IQUFIAMiBkH8____AyIHIAYgB0kbIQhBHyAIZ2shBCAIIARBBGt2QQFBBHRzIQUgBEEIQQFrayEEC0EBGiAEQRdJBH8gBUEQSQVBAAtFBEBBAEHQA0GcAkEOEAEACyABEBwhCSABEB0hCiAJBEAgCSAKEBsLIAoEQCAKIAkQGgsgAQJ_IAAhCyAEIQwgBSENIAsgDEEEdCANakECdGooAmAMAAtGBEACQCAAIQ4gBCEPIAUhECAKIREgDiAPQQR0IBBqQQJ0aiARNgJgCyAKRQRAAn8gACESIAQhEyASIBNBAnRqKAIEDAALIRQCQCAAIRUgBCEWIBRBASAFdEF_c3EiFCEXIBUgFkECdGogFzYCBAsgFEUEQCAAIAAQHkEBIAR0QX9zcRAYCwsLC-AEARt_QQEaIAFFBEBBAEHQA0HJAUEOEAEACyABEBYhAkEBGiACQQFxRQRAQQBB0ANBywFBDhABAAsCfyABIQMgA0EEaiADEBZBA0F_c3FqDAALIQQgBBAWIQUgBUEBcQRAIAAgBBAfIAEgAkEEaiAFQQNBf3NxaiICEBkCfyABIQYgBkEEaiAGEBZBA0F_c3FqDAALIQQgBBAWIQULIAJBAnEEQAJ_IAEhByAHQQRrKAIADAALIQggCBAWIQlBARogCUEBcUUEQEEAQdADQd0BQRAQAQALIAAgCBAfIAghASABIAlBBGogAkEDQX9zcWoiAhAZCyAEIAVBAnIQGSACQQNBf3NxIQpBARogCkEMT0UEQEEAQdADQekBQQ4QAQALQQEaIAFBBGogCmogBEZFBEBBAEHQA0HqAUEOEAEACyAEQQRrIAE2AgAgCkGAAkkEQEEAIQsgCkEEdiEMBSAKIg1B_P___wMiDiANIA5JGyEPQR8gD2drIQsgDyALQQRrdkEBQQR0cyEMIAtBCEEBa2shCwtBARogC0EXSQR_IAxBEEkFQQALRQRAQQBB0ANB-wFBDhABAAsCfyAAIRAgCyERIAwhEiAQIBFBBHQgEmpBAnRqKAJgDAALIRMgAUEAEBogASATEBsgEwRAIBMgARAaCwJAIAAhFCALIRUgDCEWIAEhFyAUIBVBBHQgFmpBAnRqIBc2AmALIAAgABAeQQEgC3RyEBgCQCAAIRogCyEbAn8gACEYIAshGSAYIBlBAnRqKAIEDAALQQEgDHRyIRwgGiAbQQJ0aiAcNgIECwueAgEJfyACpyEDQQEaIAGtIAJYRQRAQQBB0ANB_gJBDhABAAsgAUEEakEPakEPQX9zcUEEayEBIANBD0F_c3EhAwJ_IAAhBCAEKAKgDAwACyEFQQAhBiAFBEBBARogASAFQQRqT0UEQEEAQdADQYUDQRAQAQALIAFBEGsgBUYEQCABQRBrIQEgBRAWIQYFAQsFQQEaIAEgAEGkDGpPRQRAQQBB0ANBkgNBBRABAAsLIAMgAWshByAHQQRBDGpBBGpJBEBBAA8LIAdBAkEEbGshCCABIQkgCSAIQQFyIAZBAnFyEBkgCUEAEBogCUEAEBsgAUEEaiAIaiEFIAVBAEECchAZAkAgACEKIAUhCyAKIAs2AqAMCyAAIAkQIEEBDwv0AQEQf0EAGiMVQQ9qQQ9Bf3NxIQA_ACEBIABBpAxqQf__A2pB__8DQX9zcUEQdiECIAIgAUoEfyACIAFrQABBAEgFQQALBEAACyAAIQMgA0EAEBgCQCADIQRBACEFIAQgBTYCoAwLQQAhBgNAIAZBF0kEQAJAIAMhByAGIQhBACEJIAcgCEECdGogCTYCBAtBACEKA0AgCkEQSQRAAkAgAyELIAYhDCAKIQ1BACEOIAsgDEEEdCANakECdGogDjYCYAsgCkEBaiEKDAELCyAGQQFqIQYMAQsLIABBpAxqIQ9BABogAyAPPwCsQhCGECEaIAMkDAs-AQF_IABBBGshASAAQQBHBH8gAEEPcUUFQQALBH8gARAWQQFxRQVBAAtFBEBBAEHQA0GyBEEDEAEACyABDwsWAEEAGiABIAEQFkEBchAZIAAgARAgCxsAIAAjFUkEQA8LIwxFBEAQIgsjDCAAECMQJAsqACAAIxVJBEAgAEEAEAMgAEEAEAQFIwMgABAXayQDQQAaIABBBGoQJQsLwgIBBH8CQAJAAkACQCMFIQEgAUEARg0AIAFBAUYNASABQQJGDQIMAwtBASQFQQAkBkEAEAkjCSQIIwZBAWwPCyMKRSECIwgQByEAAkADQCAAIwlHBEAgACQIIAAQCCACRwRAIAAgAhAKQQAkBiAAQRRqQQAQUSMGQQFsDwsgABAHIQAMAQsLC0EAJAZBABAJIwgQByEAIAAjCUYEQEEAEBUjCBAHIQACQANAIAAjCUcEQCAAEAggAkcEQCAAIAIQCiAAQRRqQQAQUQsgABAHIQAMAQsLCyMLIQMjCSQLIAMkCSACJAogAxAHJAhBAiQFCyMGQQFsDwsjCCEAIAAjCUcEQCAAEAckCEEBGiAAEAgjCkVGRQRAQQBBwAFB5QFBFBABAAsgABAmQQoPCyMJIwkQAyMJIwkQBEEAJAUMAAtBAA8LYgEBf0EAGkEAGkGACEHIAWxB5ABuIQADQCAAECdrIQAjBUEARgRAQQAaIwOtQcgBrX5C5ACAp0GACGokBEEAGg8LIABBAEoNAAtBABojA0GACCMDIwRrQYAISWxqJARBABoLHwAgAEEMTQR_QQwFIABBBGpBD2pBD0F_c3FBBGsLDwshACAAQfz___8DSwRAQYABQdADQc0DQR0QAQALIAAQKQ8LIQAgAEH-____AUkEfyAAQQFBGyAAZ2t0akEBawUgAAsPC7gCARB_IAFBgAJJBEBBACECIAFBBHYhAwUgARArIQRBBEEIbEEBayAEZ2shAiAEIAJBBGt2QQFBBHRzIQMgAkEIQQFrayECC0EBGiACQRdJBH8gA0EQSQVBAAtFBEBBAEHQA0HOAkEOEAEACwJ_IAAhBSACIQYgBSAGQQJ0aigCBAwAC0EAQX9zIAN0cSEHQQAhCCAHRQRAIAAQHkEAQX9zIAJBAWp0cSEJIAlFBEBBACEIBSAJaCECAn8gACEKIAIhCyAKIAtBAnRqKAIEDAALIQdBARogB0UEQEEAQdADQdsCQRIQAQALAn8gACEMIAIhDSAHaCEOIAwgDUEEdCAOakECdGooAmAMAAshCAsFAn8gACEPIAIhECAHaCERIA8gEEEEdCARakECdGooAmAMAAshCAsgCA8LhwEBB39BABogAUGAAk8EQCABECshAQs_ACECIAFBBCACQRB0QQRrAn8gACEDIAMoAqAMDAALR3RqIQEgAUH__wNqQf__A0F_c3FBEHYhBCACIgUgBCIGIAUgBkobIQcgB0AAQQBIBEAgBEAAQQBIBEAACws_ACEIIAAgAkEQdCAIrEIQhhAhGguwAQEFfyABEBYhA0EBGiACQQRqQQ9xRUUEQEEAQdADQekCQQ4QAQALIANBA0F_c3EgAmshBCAEQQRBDGpPBEAgASACIANBAnFyEBkgAUEEaiACaiEFIAUgBEEEa0EBchAZIAAgBRAgBSABIANBAUF_c3EQGQJ_IAEhByAHQQRqIAcQFkEDQX9zcWoMAAsCfyABIQYgBkEEaiAGEBZBA0F_c3FqDAALEBZBAkF_c3EQGQsLcQECfyABECohAiAAIAIQLCEDIANFBEAgACACEC0gACACECwhA0EBGiADRQRAQQBB0ANB8wNBEBABAAsLQQEaIAMQFkEDQX9zcSACT0UEQEEAQdADQfUDQQ4QAQALIAAgAxAfIAAgAyACEC5BABogAw8LFAAjDEUEQBAiCyMMIAAQL0EEag8LCQAgACABNgIMCwkAIAAgATYCEAtkAQJ_IABB7P___wNPBEBBgAFBwAFBhQJBHxABAAsjAyMETwRAECgLQRAgAGoQMEEEayECIAIgARAxIAIgABAyIAIjCyMKEBIjAyACEBdqJAMgAkEUaiEDIANBACAA_AsAIAMPCx4BAX8gACABEDMhAyACBEAgAyACIAD8CgAACyADDwtuAQN_IAFFBEAPC0EBGiAARQRAQQBBwAFBpwJBDhABAAsgAUEUayEDIAMQCCMKRgRAIABBFGshBCAEEAghBSAFIwpFRgRAIAIEQCAEEBMFIAMQEwsFIAVBA0YEfyMFQQFGBUEACwRAIAMQEwsLCwsHACAAKAIMCwcAIAAoAggLBwAgACgCAAsHACAAKAIQC0wBBH8gAEEUayECIAEgAhAWQQNBf3NxQRBrTQRAIAIgARAyIAAPCyABIAIQDhAzIQMgAyAAIAEiBCACEDkiBSAEIAVJG_wKAAAgAw8LBwAgACgCBAsJACAAIAE2AgwLYgAgAEGgjQZJBEAgAEHkAEkEQEEBIABBCk9qDwVBAyAAQZDOAE9qIABB6AdPag8LAAUgAEGAreIESQRAQQYgAEHAhD1Pag8FQQggAEGAlOvcA09qIABBgMLXL09qDwsACwAL-QECCX8CfgJAA0AgAUGQzgBPBEAgAUGQzgBuIQMgAUGQzgBwIQQgAyEBIARB5ABuIQUgBEHkAHAhBkG8BiAFQQJ0ajUCACEMQbwGIAZBAnRqNQIAIQ0gAkEEayECIAAgAkEBdGogDCANQiCGhDcDAAwBCwsLIAFB5ABPBEAgAUHkAG4hByABQeQAcCEIIAchASACQQJrIQJBvAYgCEECdGooAgAhCSAAIAJBAXRqIAk2AgALIAFBCk8EQCACQQJrIQJBvAYgAUECdGooAgAhCiAAIAJBAXRqIAo2AgAFIAJBAWshAkEwIAFqIQsgACACQQF0aiALOwEACwuXAQAgAEKAgJqm6q_jAVQEQCAAQoCglKWNHVQEQEEKIABCgNDbw_QCWmogAEKAyK-gJVpqDwVBDSAAQoCA6YOx3hZaaiAAQoDAyvOEowJaag8LAAUgAEKAgKjsha_RsQFUBEBBECAAQoCAhP6m3uERWmoPBUESIABCgICgz8jgyOOKf1pqIABCgICQu7rWrfANWmoPCwALAAvcAQIDfgd_AkADQCABQoDC1y9aBEAgAUKAwtcvgCEDIAEgA0KAwtcvfn2nIQYgAyEBIAZBkM4AbiEHIAZBkM4AcCEIIAdB5ABuIQkgB0HkAHAhCiAIQeQAbiELIAhB5ABwIQxBvAYgC0ECdGo1AgAhBEG8BiAMQQJ0ajUCACEFIAJBBGshAiAAIAJBAXRqIAQgBUIghoQ3AwBBvAYgCUECdGo1AgAhBEG8BiAKQQJ0ajUCACEFIAJBBGshAiAAIAJBAXRqIAQgBUIghoQ3AwAMAQsLCyAAIAGnIAIQPgtWAAJAA0AgAkECTwRAIAJBAmshAiAAIAJBAXRqQeAJIAGnQf8BcUECdGooAgA2AgAgAUIIiCEBDAELCwsgAkEBcQRAIABB4AkgAadBBnRqLwEAOwEACwuAAQICfwJ-An8gASECIAJpQQFGDAALBEBBPyAAeadrQR8gAWdrbkEBag8LIAGsIQQgBCEFQQEhAwJAA0AgACAFWgRAIAAgBYAhACAFIAV-IQUgA0EBdCEDDAELCwsCQANAIABCAVoEQCAAIASAIQAgA0EBaiEDDAELCwsgA0EBaw8LlQEBBH4gA6whBCADIANBAWtxQQBGBEAgA2hBB3GsIQUgBEIBfSEGA0AgAkEBayECIAAgAkEBdGpBgBIgASAGg6dBAXRqLwEAOwEAIAEgBYghASABQgBSDQALBQNAIAJBAWshAiABIASAIQcgACACQQF0akGAEiABIAcgBH59p0EBdGovAQA7AQAgByEBIAFCAFINAAsLCwkAIAAgARBeDwsHACAAKAIQC68BAQR_IAAhAiACIABBFGsQRWohAyABQQBHIQQCQANAIAIgA0kEQCACLwEAIQUgBUGAAUkEQCABIAVFcQRADAQLIARBAWohBAUgBUGAEEkEQCAEQQJqIQQFIAVBgPgDcUGAsANGBH8gAkECaiADSQVBAAsEQCACLwECQYD4A3FBgLgDRgRAIARBBGohBCACQQRqIQIMBQsLIARBA2ohBAsLIAJBAmohAgwBCwsLIAQPCw0AIABBFGsQRUEBdg8LuAMBDn8gACABQQF0aiEFIAIhBgJAA0AgACAFSQRAIAAvAQAhByAHQYABSQRAIAYgBzoAACAGQQFqIQYgAyAHRXEEQCAGIAJrDwsFIAdBgBBJBEAgB0EGdkHAAXIhCCAHQT9xQYABciEJIAYgCUEIdCAIcjsBACAGQQJqIQYFIAdBgPADcUGAsANGBEAgB0GAuANJBH8gAEECaiAFSQVBAAsEQCAALwECIQogCkGA-ANxQYC4A0YEQEGAgAQgB0H_B3FBCnRqIApB_wdxciEHIAdBEnZB8AFyIQsgB0EMdkE_cUGAAXIhDCAHQQZ2QT9xQYABciENIAdBP3FBgAFyIQ4gBiAOQRh0IA1BEHRyIAxBCHRyIAtyNgIAIAZBBGohBiAAQQRqIQAMBgsLIARBAEcEQCAEQQJGBEBB4BJBoBNB5gVBMRABAAtB_f8DIQcLCyAHQQx2QeABciEPIAdBBnZBP3FBgAFyIRAgB0E_cUGAAXIhESAGIBBBCHQgD3I7AQAgBiAROgACIAZBA2ohBgsLIABBAmohAAwBCwsLIAMEQCAGIhJBAWohBiASQQA6AAALIAYgAmsPCwoAIABBFGsQRQ8LLgEBf0HAAiAAEBRBkAQgABAUQYABIAAQFEHgEiAAEBRB4AkgABAUQYASIAAQFAsaAQF_IAAgARBMIAAoAgAiAgRAIAIgARAUCwsDAAELBwAgACgCAAsOACAAIAEQTCAAIAEQWwsHACAAKAIACw4AIAAgARBMIAAgARBcC0EAAkACQAJAAkACQAJAAkAgAEEIaygCAA4GAAECAwQFBgsPCw8LDwsgACABEEsPCyAAIAEQTg8LIAAgARBQDwsACyQAPwBBEHQjFWtBAXYkBEHwARAFJAdBkAIQBSQJQaADEAUkCwsZACMUIxNIBEBBkJQCQcCUAkEBQQEQAQALC9IBAQt_IxRBBGskFBBTIxRBADYCACAAIQ4jFCAONgIAIA4QNyEEIAEgBCACdksEQCABQfz___8DIAJ2SwRAQZAEQcAEQRNBMBABAAsgACEOIxQgDjYCACAOEDghBSABIgZBCCIHIAYgB0sbIAJ0IQggAwRAIARBAXQiCUH8____AyIKIAkgCkkbIgsgCCIMIAsgDEsbIQgLIAUgCBA6IQ1BAiMCRxogDSAFRwRAIAAgDTYCACAAIA02AgQgACANQQAQNQsgACAINgIICyMUQQRqJBQLcgEDfyMUQQRrJBQQUyMUQQA2AgAgACEEIxQgBDYCACAEEDYhAiACQQFqIQMgACADQQBBARBUQQAaIAAhBCMUIAQ2AgAgBBA7IAJBAHRqIAE6AAAgACEEIxQgBDYCACAEIAMQPCADIQQjFEEEaiQUIAQPCy8BAX8jFEEEayQUEFMjFEEANgIAIAAhASMUIAE2AgAgARA2IQEjFEEEaiQUIAEPC2IBAn8jFEEEayQUEFMjFEEANgIAIAEgACEDIxQgAzYCACADEDZPBEBBwAJBwARB8gBBKhABAAsgACEDIxQgAzYCACADEDsgAUEAdGotAAAhAkEAGiACIQMjFEEEaiQUIAMPC1gBAn8jFEEIayQUEFMjFEIANwMAIxQgACEEIxQgBDYCACAEIAEQRkEBEDMiAzYCBCAAIAAhBCMUIAQ2AgAgBBBHIAMgASACEEgaIAMhBCMUQQhqJBQgBA8LUgEBfyMUQQRrJBQQUyMUQQA2AgACQAJAAkACQCMRQQFrDgMBAgMACwALQQAhAQtBACECCyAAIQMjFCADNgIAIAMgASACEFghAyMUQQRqJBQgAwumAgIMfwF-IxRBEGskFBBTIxRCADcDACMUQgA3AwhBECEAQSAhAUIAIQwgASAANgIAIAFBATYCBCABEAAhAiMUQQBBAEEEQeAAEF0iBTYCAEEAIQYDQCAGIAJJBEAgBSELIxQgCzYCBCALIAAgBmotAAAQVRogBkEBaiEGDAELC0EAIQcDQCAHIAUhCyMUIAs2AgQgCxBWQQJrSARAIAxCCn4gBSELIxQgCzYCBCALIAcQV0Ewa0H_AXGtfCEMIAdBAWohBwwBCwsjFCAMQgp-QguAQQoQRCIINgIIIxQgCCELIxQgCzYCBCALQQBBASQRQQAQWSIJNgIMIAkhCyMUIAs2AgQgCxBJIQpBwBMgCTYCAEHAEyAKNgIEQcATEAIjFEEQaiQUCzEBAX8jFEEEayQUEFMjFEEANgIAQQAaIAAhAiMUIAI2AgAgAhBNIAEQFCMUQQRqJBQLMQEBfyMUQQRrJBQQUyMUQQA2AgBBABogACECIxQgAjYCACACEE8gARAUIxRBBGokFAtkAQR_IxRBBGskFBBTIxRBADYCACAAIAF0IQQjFCAEQQEgAxA0IgU2AgBBECACEDMhBiAGIAU2AgAgBiAFQQAQNSAGIAU2AgQgBiAENgIIIAYgADYCDCAGIQcjFEEEaiQUIAcPC8ICAg5_An4jFEEEayQUEFMjFEEANgIAIAFBAkgEf0EBBSABQSRKCwRAQfAEQfAFQZEDQQUQAQALIABCAFJFBEBBsAYhDyMUQQRqJBQgDw8LIAFBCkYEQCAAIw-tWARAIACnIQMgAxA9IQQjFCAEQQF0QQIQMyICNgIAAkAgAiEFIAMhBiAEIQdBAEEBThogBSAGIAcQPgsFIAAQPyEIIxQgCEEBdEECEDMiAjYCAAJAIAIhCSAAIRAgCCEKQQBBAU4aIAkgECAKEEALCwUgAUEQRgRAQT8gAHmna0ECdUEBaiELIxQgC0EBdEECEDMiAjYCAAJAIAIhDCAAIREgCyENQQBBAU4aIAwgESANEEELBSAAIAEQQiEOIxQgDkEBdEECEDMiAjYCACACIAAgDiABEEMLCyACIQ8jFEEEaiQUIA8PCwu1FBcAQRALAQAAQSALIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEHMAAsgHAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAQewAC0A8AAAAAAAAAAAAAAACAAAAKAAAAEEAbABsAG8AYwBhAHQAaQBvAG4AIAB0AG8AbwAgAGwAYQByAGcAZQAAAAAAAEGsAQtAPAAAAAAAAAAAAAAAAgAAACAAAAB-AGwAaQBiAC8AcgB0AC8AaQB0AGMAbQBzAC4AdABzAAAAAAAAAAAAAAAAAABB8AELFAAAAAAAAAAAAAAAAAAAAAAAAAAAAEGQAgsUAAAAAAAAAAAAAAAAAAAAAAAAAAAAQawCC0A8AAAAAAAAAAAAAAACAAAAJAAAAEkAbgBkAGUAeAAgAG8AdQB0ACAAbwBmACAAcgBhAG4AZwBlAAAAAAAAAAAAAEHsAgswLAAAAAAAAAAAAAAAAgAAABQAAAB-AGwAaQBiAC8AcgB0AC4AdABzAAAAAAAAAAAAAEGgAwsUAAAAAAAAAAAAAAAAAAAAAAAAAAAAQbwDC0A8AAAAAAAAAAAAAAACAAAAHgAAAH4AbABpAGIALwByAHQALwB0AGwAcwBmAC4AdABzAAAAAAAAAAAAAAAAAAAAAEH8AwswLAAAAAAAAAAAAAAAAgAAABwAAABJAG4AdgBhAGwAaQBkACAAbABlAG4AZwB0AGgAAEGsBAswLAAAAAAAAAAAAAAAAgAAABoAAAB-AGwAaQBiAC8AYQByAHIAYQB5AC4AdABzAAAAAEHcBAuAAXwAAAAAAAAAAAAAAAIAAABkAAAAdABvAFMAdAByAGkAbgBnACgAKQAgAHIAYQBkAGkAeAAgAGEAcgBnAHUAbQBlAG4AdAAgAG0AdQBzAHQAIABiAGUAIABiAGUAdAB3AGUAZQBuACAAMgAgAGEAbgBkACAAMwA2AAAAAAAAAAAAAEHcBQtAPAAAAAAAAAAAAAAAAgAAACYAAAB-AGwAaQBiAC8AdQB0AGkAbAAvAG4AdQBtAGIAZQByAC4AdABzAAAAAAAAAABBnAYLIBwAAAAAAAAAAAAAAAIAAAACAAAAMAAAAAAAAAAAAAAAAEG8BguQAzAAMAAwADEAMAAyADAAMwAwADQAMAA1ADAANgAwADcAMAA4ADAAOQAxADAAMQAxADEAMgAxADMAMQA0ADEANQAxADYAMQA3ADEAOAAxADkAMgAwADIAMQAyADIAMgAzADIANAAyADUAMgA2ADIANwAyADgAMgA5ADMAMAAzADEAMwAyADMAMwAzADQAMwA1ADMANgAzADcAMwA4ADMAOQA0ADAANAAxADQAMgA0ADMANAA0ADQANQA0ADYANAA3ADQAOAA0ADkANQAwADUAMQA1ADIANQAzADUANAA1ADUANQA2ADUANwA1ADgANQA5ADYAMAA2ADEANgAyADYAMwA2ADQANgA1ADYANgA2ADcANgA4ADYAOQA3ADAANwAxADcAMgA3ADMANwA0ADcANQA3ADYANwA3ADcAOAA3ADkAOAAwADgAMQA4ADIAOAAzADgANAA4ADUAOAA2ADgANwA4ADgAOAA5ADkAMAA5ADEAOQAyADkAMwA5ADQAOQA1ADkANgA5ADcAOQA4ADkAOQAAQcwJC6AIHAQAAAAAAAAAAAAAAgAAAAAEAAAwADAAMAAxADAAMgAwADMAMAA0ADAANQAwADYAMAA3ADAAOAAwADkAMABhADAAYgAwAGMAMABkADAAZQAwAGYAMQAwADEAMQAxADIAMQAzADEANAAxADUAMQA2ADEANwAxADgAMQA5ADEAYQAxAGIAMQBjADEAZAAxAGUAMQBmADIAMAAyADEAMgAyADIAMwAyADQAMgA1ADIANgAyADcAMgA4ADIAOQAyAGEAMgBiADIAYwAyAGQAMgBlADIAZgAzADAAMwAxADMAMgAzADMAMwA0ADMANQAzADYAMwA3ADMAOAAzADkAMwBhADMAYgAzAGMAMwBkADMAZQAzAGYANAAwADQAMQA0ADIANAAzADQANAA0ADUANAA2ADQANwA0ADgANAA5ADQAYQA0AGIANABjADQAZAA0AGUANABmADUAMAA1ADEANQAyADUAMwA1ADQANQA1ADUANgA1ADcANQA4ADUAOQA1AGEANQBiADUAYwA1AGQANQBlADUAZgA2ADAANgAxADYAMgA2ADMANgA0ADYANQA2ADYANgA3ADYAOAA2ADkANgBhADYAYgA2AGMANgBkADYAZQA2AGYANwAwADcAMQA3ADIANwAzADcANAA3ADUANwA2ADcANwA3ADgANwA5ADcAYQA3AGIANwBjADcAZAA3AGUANwBmADgAMAA4ADEAOAAyADgAMwA4ADQAOAA1ADgANgA4ADcAOAA4ADgAOQA4AGEAOABiADgAYwA4AGQAOABlADgAZgA5ADAAOQAxADkAMgA5ADMAOQA0ADkANQA5ADYAOQA3ADkAOAA5ADkAOQBhADkAYgA5AGMAOQBkADkAZQA5AGYAYQAwAGEAMQBhADIAYQAzAGEANABhADUAYQA2AGEANwBhADgAYQA5AGEAYQBhAGIAYQBjAGEAZABhAGUAYQBmAGIAMABiADEAYgAyAGIAMwBiADQAYgA1AGIANgBiADcAYgA4AGIAOQBiAGEAYgBiAGIAYwBiAGQAYgBlAGIAZgBjADAAYwAxAGMAMgBjADMAYwA0AGMANQBjADYAYwA3AGMAOABjADkAYwBhAGMAYgBjAGMAYwBkAGMAZQBjAGYAZAAwAGQAMQBkADIAZAAzAGQANABkADUAZAA2AGQANwBkADgAZAA5AGQAYQBkAGIAZABjAGQAZABkAGUAZABmAGUAMABlADEAZQAyAGUAMwBlADQAZQA1AGUANgBlADcAZQA4AGUAOQBlAGEAZQBiAGUAYwBlAGQAZQBlAGUAZgBmADAAZgAxAGYAMgBmADMAZgA0AGYANQBmADYAZgA3AGYAOABmADkAZgBhAGYAYgBmAGMAZgBkAGYAZQBmAGYAAAAAAAAAAAAAAAAAAEHsEQtgXAAAAAAAAAAAAAAAAgAAAEgAAAAwADEAMgAzADQANQA2ADcAOAA5AGEAYgBjAGQAZQBmAGcAaABpAGoAawBsAG0AbgBvAHAAcQByAHMAdAB1AHYAdwB4AHkAegAAAAAAAEHMEgtAPAAAAAAAAAAAAAAAAgAAACQAAABVAG4AcABhAGkAcgBlAGQAIABzAHUAcgByAG8AZwBhAHQAZQAAAAAAAAAAAABBjBMLMCwAAAAAAAAAAAAAAAIAAAAcAAAAfgBsAGkAYgAvAHMAdAByAGkAbgBnAC4AdABzAABBwBMLIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEHgEwscBgAAACAAAAAgAAAAIAAAAAAAAABCAAAAAgkAAADcLwRuYW1lAeYVXwAbYXNzZW1ibHkvc3dlZXRjb3JuL2ZkX3N0ZGluARN-bGliL2J1aWx0aW5zL2Fib3J0Ahxhc3NlbWJseS9zd2VldGNvcm4vZmRfc3Rkb3V0AyZ-bGliL3J0L2l0Y21zL09iamVjdCNzZXQ6bmV4dFdpdGhDb2xvcgQdfmxpYi9ydC9pdGNtcy9PYmplY3Qjc2V0OnByZXYFFn5saWIvcnQvaXRjbXMvaW5pdExhenkGJn5saWIvcnQvaXRjbXMvT2JqZWN0I2dldDpuZXh0V2l0aENvbG9yBx1-bGliL3J0L2l0Y21zL09iamVjdCNnZXQ6bmV4dAgefmxpYi9ydC9pdGNtcy9PYmplY3QjZ2V0OmNvbG9yCRh-bGliL3J0L2l0Y21zL3Zpc2l0Um9vdHMKHn5saWIvcnQvaXRjbXMvT2JqZWN0I3NldDpjb2xvcgsdfmxpYi9ydC9pdGNtcy9PYmplY3QjZ2V0OnByZXYMHX5saWIvcnQvaXRjbXMvT2JqZWN0I3NldDpuZXh0DRt-bGliL3J0L2l0Y21zL09iamVjdCN1bmxpbmsOHX5saWIvcnQvaXRjbXMvT2JqZWN0I2dldDpydElkDyd-bGliL3NoYXJlZC90eXBlaW5mby9UeXBlaW5mbyNnZXQ6ZmxhZ3MQEn5saWIvcnQvX190eXBlaW5mbxEmfmxpYi9ydC9pdGNtcy9PYmplY3QjZ2V0OmlzUG9pbnRlcmZyZWUSG35saWIvcnQvaXRjbXMvT2JqZWN0I2xpbmtUbxMdfmxpYi9ydC9pdGNtcy9PYmplY3QjbWFrZUdyYXkUFX5saWIvcnQvaXRjbXMvX192aXNpdBUYfmxpYi9ydC9pdGNtcy92aXNpdFN0YWNrFh9-bGliL3J0L2NvbW1vbi9CTE9DSyNnZXQ6bW1JbmZvFx1-bGliL3J0L2l0Y21zL09iamVjdCNnZXQ6c2l6ZRgbfmxpYi9ydC90bHNmL1Jvb3Qjc2V0OmZsTWFwGR9-bGliL3J0L2NvbW1vbi9CTE9DSyNzZXQ6bW1JbmZvGht-bGliL3J0L3Rsc2YvQmxvY2sjc2V0OnByZXYbG35saWIvcnQvdGxzZi9CbG9jayNzZXQ6bmV4dBwbfmxpYi9ydC90bHNmL0Jsb2NrI2dldDpwcmV2HRt-bGliL3J0L3Rsc2YvQmxvY2sjZ2V0Om5leHQeG35saWIvcnQvdGxzZi9Sb290I2dldDpmbE1hcB8YfmxpYi9ydC90bHNmL3JlbW92ZUJsb2NrIBh-bGliL3J0L3Rsc2YvaW5zZXJ0QmxvY2shFn5saWIvcnQvdGxzZi9hZGRNZW1vcnkiF35saWIvcnQvdGxzZi9pbml0aWFsaXplIxt-bGliL3J0L3Rsc2YvY2hlY2tVc2VkQmxvY2skFn5saWIvcnQvdGxzZi9mcmVlQmxvY2slE35saWIvcnQvdGxzZi9fX2ZyZWUmEn5saWIvcnQvaXRjbXMvZnJlZScSfmxpYi9ydC9pdGNtcy9zdGVwKBd-bGliL3J0L2l0Y21zL2ludGVycnVwdCkYfmxpYi9ydC90bHNmL2NvbXB1dGVTaXplKhh-bGliL3J0L3Rsc2YvcHJlcGFyZVNpemUrFn5saWIvcnQvdGxzZi9yb3VuZFNpemUsGH5saWIvcnQvdGxzZi9zZWFyY2hCbG9jay0XfmxpYi9ydC90bHNmL2dyb3dNZW1vcnkuGX5saWIvcnQvdGxzZi9wcmVwYXJlQmxvY2svGn5saWIvcnQvdGxzZi9hbGxvY2F0ZUJsb2NrMBR-bGliL3J0L3Rsc2YvX19hbGxvYzEdfmxpYi9ydC9pdGNtcy9PYmplY3Qjc2V0OnJ0SWQyH35saWIvcnQvaXRjbXMvT2JqZWN0I3NldDpydFNpemUzE35saWIvcnQvaXRjbXMvX19uZXc0E35saWIvcnQvX19uZXdCdWZmZXI1FH5saWIvcnQvaXRjbXMvX19saW5rNiB-bGliL2FycmF5L0FycmF5PHU4PiNnZXQ6bGVuZ3RoXzcvfmxpYi9hcnJheWJ1ZmZlci9BcnJheUJ1ZmZlclZpZXcjZ2V0OmJ5dGVMZW5ndGg4K35saWIvYXJyYXlidWZmZXIvQXJyYXlCdWZmZXJWaWV3I2dldDpidWZmZXI5H35saWIvcnQvaXRjbXMvT2JqZWN0I2dldDpydFNpemU6FX5saWIvcnQvaXRjbXMvX19yZW5ldzsifmxpYi9hcnJheS9BcnJheTx1OD4jZ2V0OmRhdGFTdGFydDwgfmxpYi9hcnJheS9BcnJheTx1OD4jc2V0Omxlbmd0aF89H35saWIvdXRpbC9udW1iZXIvZGVjaW1hbENvdW50MzI-H35saWIvdXRpbC9udW1iZXIvdXRvYTMyX2RlY19sdXQ_I35saWIvdXRpbC9udW1iZXIvZGVjaW1hbENvdW50NjRIaWdoQB9-bGliL3V0aWwvbnVtYmVyL3V0b2E2NF9kZWNfbHV0QR1-bGliL3V0aWwvbnVtYmVyL3V0b2FfaGV4X2x1dEIafmxpYi91dGlsL251bWJlci91bG9nX2Jhc2VDIH5saWIvdXRpbC9udW1iZXIvdXRvYTY0X2FueV9jb3JlRBh-bGliL251bWJlci9VNjQjdG9TdHJpbmdFIH5saWIvcnQvY29tbW9uL09CSkVDVCNnZXQ6cnRTaXplRiJ-bGliL3N0cmluZy9TdHJpbmcuVVRGOC5ieXRlTGVuZ3RoRx1-bGliL3N0cmluZy9TdHJpbmcjZ2V0Omxlbmd0aEgkfmxpYi9zdHJpbmcvU3RyaW5nLlVURjguZW5jb2RlVW5zYWZlSSt-bGliL2FycmF5YnVmZmVyL0FycmF5QnVmZmVyI2dldDpieXRlTGVuZ3RoShd-bGliL3J0L19fdmlzaXRfZ2xvYmFsc0smfmxpYi9hcnJheWJ1ZmZlci9BcnJheUJ1ZmZlclZpZXd-dmlzaXRMGH5saWIvb2JqZWN0L09iamVjdH52aXNpdE0ffmxpYi9hcnJheS9BcnJheTx1OD4jZ2V0OmJ1ZmZlck4afmxpYi9hcnJheS9BcnJheTx1OD5-dmlzaXRPIH5saWIvYXJyYXkvQXJyYXk8aTMyPiNnZXQ6YnVmZmVyUBt-bGliL2FycmF5L0FycmF5PGkzMj5-dmlzaXRRF35saWIvcnQvX192aXNpdF9tZW1iZXJzUgZ-c3RhcnRTDH5zdGFja19jaGVja1QZfmxpYi9hcnJheS9lbnN1cmVDYXBhY2l0eVUZfmxpYi9hcnJheS9BcnJheTx1OD4jcHVzaFYffmxpYi9hcnJheS9BcnJheTx1OD4jZ2V0Omxlbmd0aFcafmxpYi9hcnJheS9BcnJheTx1OD4jX19nZXRYHn5saWIvc3RyaW5nL1N0cmluZy5VVEY4LmVuY29kZVkmfmxpYi9zdHJpbmcvU3RyaW5nLlVURjguZW5jb2RlQHZhcmFyZ3NaHGFzc2VtYmx5L3N3ZWV0Y29ybi9zd2VldENvcm5bHH5saWIvYXJyYXkvQXJyYXk8dTg-I19fdmlzaXRcHX5saWIvYXJyYXkvQXJyYXk8aTMyPiNfX3Zpc2l0XRJ-bGliL3J0L19fbmV3QXJyYXleF35saWIvdXRpbC9udW1iZXIvdXRvYTY0Ap8VVAMCAAR0aGlzAQ1uZXh0V2l0aENvbG9yBAIABHRoaXMBBHByZXYFAQAFc3BhY2UGAQAEdGhpcwcBAAR0aGlzCAEABHRoaXMJAwAGY29va2llAQJwbgIEaXRlcgoCAAR0aGlzAQVjb2xvcgsBAAR0aGlzDAIABHRoaXMBA29iag0DAAR0aGlzAQRuZXh0AgRwcmV2DgEABHRoaXMPAQAEdGhpcxACAAJpZAEDcHRyEQIABHRoaXMBBHJ0SWQSBAAEdGhpcwEEbGlzdAIJd2l0aENvbG9yAwRwcmV2EwIABHRoaXMBATEUAwADcHRyAQZjb29raWUCA29iahUCAAZjb29raWUBA3B0chYBAAR0aGlzFwEABHRoaXMYAgAEdGhpcwEFZmxNYXAZAgAEdGhpcwEGbW1JbmZvGgIABHRoaXMBBHByZXYbAgAEdGhpcwEEbmV4dBwBAAR0aGlzHQEABHRoaXMeAQAEdGhpcx8YAARyb290AQVibG9jawIJYmxvY2tJbmZvAwRzaXplBAJmbAUCc2wGATYHATcIC2JvdW5kZWRTaXplCQRwcmV2CgRuZXh0Cwdyb290fDExDAVmbHwxMg0Fc2x8MTMOB3Jvb3R8MTQPBWZsfDE1EAVzbHwxNhEEaGVhZBIHcm9vdHwxOBMFZmx8MTkUBXNsTWFwFQdyb290fDIxFgVmbHwyMhcIc2xNYXB8MjMgHQAEcm9vdAEFYmxvY2sCCWJsb2NrSW5mbwMHYmxvY2t8MwQFcmlnaHQFCXJpZ2h0SW5mbwYHYmxvY2t8NgcHYmxvY2t8NwgEbGVmdAkIbGVmdEluZm8KBHNpemULAmZsDAJzbA0CMTMOAjE0Dwtib3VuZGVkU2l6ZRAHcm9vdHwxNhEFZmx8MTcSBXNsfDE4EwRoZWFkFAdyb290fDIwFQVmbHwyMRYFc2x8MjIXB2hlYWR8MjMYB3Jvb3R8MjQZBWZsfDI1Ggdyb290fDI2GwVmbHwyNxwFc2xNYXAhDAAEcm9vdAEFc3RhcnQCBmVuZFU2NAMDZW5kBAZyb290fDQFBHRhaWwGCHRhaWxJbmZvBwRzaXplCAhsZWZ0U2l6ZQkEbGVmdAoHcm9vdHwxMAsHdGFpbHwxMSIQAApyb290T2Zmc2V0AQtwYWdlc0JlZm9yZQILcGFnZXNOZWVkZWQDBHJvb3QEBnJvb3R8NAUEdGFpbAYCZmwHBnJvb3R8NwgEZmx8OAkFc2xNYXAKAnNsCwdyb290fDExDAVmbHwxMg0Fc2x8MTMOBGhlYWQPCG1lbVN0YXJ0IwIAA3B0cgEFYmxvY2skAgAEcm9vdAEFYmxvY2slAQADcHRyJgEAA29iaicEAANvYmoBATECBWJsYWNrAwRmcm9tKAEABmJ1ZGdldCkBAARzaXplKgEABHNpemUrAQAEc2l6ZSwSAARyb290AQRzaXplAgJmbAMCc2wEC3JlcXVlc3RTaXplBQZyb290fDUGBGZsfDYHBXNsTWFwCARoZWFkCQVmbE1hcAoHcm9vdHwxMAsFZmx8MTEMB3Jvb3R8MTINBWZsfDEzDgVzbHwxNA8Hcm9vdHwxNRAFZmx8MTYRBXNsfDE3LQkABHJvb3QBBHNpemUCC3BhZ2VzQmVmb3JlAwZyb290fDMEC3BhZ2VzTmVlZGVkBQE1BgE2BwtwYWdlc1dhbnRlZAgKcGFnZXNBZnRlci4IAARyb290AQVibG9jawIEc2l6ZQMJYmxvY2tJbmZvBAlyZW1haW5pbmcFBXNwYXJlBgdibG9ja3w2BwdibG9ja3w3LwQABHJvb3QBBHNpemUCC3BheWxvYWRTaXplAwVibG9jazABAARzaXplMQIABHRoaXMBBHJ0SWQyAgAEdGhpcwEGcnRTaXplMwQABHNpemUBAmlkAgNvYmoDA3B0cjQEAARzaXplAQJpZAIEZGF0YQMGYnVmZmVyNQYACXBhcmVudFB0cgEIY2hpbGRQdHICDmV4cGVjdE11bHRpcGxlAwVjaGlsZAQGcGFyZW50BQtwYXJlbnRDb2xvcjYBAAR0aGlzNwEABHRoaXM4AQAEdGhpczkBAAR0aGlzOgYABm9sZFB0cgEEc2l6ZQIGb2xkT2JqAwZuZXdQdHIEATQFATU7AQAEdGhpczwCAAR0aGlzAQdsZW5ndGhfPQEABXZhbHVlPg4ABmJ1ZmZlcgEDbnVtAgZvZmZzZXQDAXQEAXIFAmQxBgJkMgcDdHw5CAVkMXwxMAkGZGlnaXRzCglkaWdpdHN8MTILBWRpZ2l0DAdkaWdpdHMxDQdkaWdpdHMyPwEABXZhbHVlQA0ABmJ1ZmZlcgEDbnVtAgZvZmZzZXQDAXQEB2RpZ2l0czEFB2RpZ2l0czIGAXIHAWIIAWMJAmIxCgJiMgsCYzEMAmMyQQMABmJ1ZmZlcgEDbnVtAgZvZmZzZXRCBgADbnVtAQRiYXNlAgV2YWx1ZQMBZQQDYjY0BQFiQwgABmJ1ZmZlcgEDbnVtAgZvZmZzZXQDBXJhZGl4BARiYXNlBQVzaGlmdAYEbWFzawcBcUQCAAR0aGlzAQVyYWRpeEUBAAR0aGlzRgYAA3N0cgEObnVsbFRlcm1pbmF0ZWQCBnN0ck9mZgMGc3RyRW5kBAZidWZMZW4FAmMxRwEABHRoaXNIEwADc3RyAQNsZW4CA2J1ZgMObnVsbFRlcm1pbmF0ZWQECWVycm9yTW9kZQUGc3RyRW5kBgZidWZPZmYHAmMxCAJiMAkCYjEKAmMyCwViMHwxMQwFYjF8MTINAmIyDgJiMw8FYjB8MTUQBWIxfDE2EQViMnwxNxICMThJAQAEdGhpc00BAAR0aGlzTwEABHRoaXNUDgAFYXJyYXkBB25ld1NpemUCCWFsaWduTG9nMgMHY2FuR3JvdwQLb2xkQ2FwYWNpdHkFB29sZERhdGEGATYHATcIC25ld0NhcGFjaXR5CQE5CgIxMAsCMTEMAjEyDQduZXdEYXRhVQQABHRoaXMBBXZhbHVlAgZvbGRMZW4DA2xlblYBAAR0aGlzVwMABHRoaXMBBWluZGV4AgV2YWx1ZVgEAANzdHIBDm51bGxUZXJtaW5hdGVkAgllcnJvck1vZGUDA2J1ZlkDAANzdHIBDm51bGxUZXJtaW5hdGVkAgllcnJvck1vZGVaDAAEYnl0ZQEDaW92AgZsZW5ndGgDATQEATUFBGxpbmUGAWkHA2l8OAgGYW5zd2VyCQ9hbnN3ZXJfdXRmOF9idWYKD2Fuc3dlcl91dGY4X2xlbgwBTlsCAAR0aGlzAQZjb29raWVcAgAEdGhpcwEGY29va2llXQcABmxlbmd0aAEJYWxpZ25Mb2cyAgJpZAMEZGF0YQQKYnVmZmVyU2l6ZQUGYnVmZmVyBgVhcnJheV4RAAV2YWx1ZQEFcmFkaXgCA291dAMFdmFsMzIECGRlY2ltYWxzBQZidWZmZXIGA251bQcGb2Zmc2V0CApkZWNpbWFsc3w4CQhidWZmZXJ8OQoJb2Zmc2V0fDExCwtkZWNpbWFsc3wxMgwJYnVmZmVyfDEzDQlvZmZzZXR8MTUOC2RlY2ltYWxzfDE2EAZudW18MTARBm51bXwxNAUEAQABMAe9BBYAIH5saWIvc2hhcmVkL3J1bnRpbWUvUnVudGltZS5TdHViASN-bGliL3NoYXJlZC9ydW50aW1lL1J1bnRpbWUuTWluaW1hbAInfmxpYi9zaGFyZWQvcnVudGltZS9SdW50aW1lLkluY3JlbWVudGFsAxN-bGliL3J0L2l0Y21zL3RvdGFsBBd-bGliL3J0L2l0Y21zL3RocmVzaG9sZAUTfmxpYi9ydC9pdGNtcy9zdGF0ZQYYfmxpYi9ydC9pdGNtcy92aXNpdENvdW50BxZ-bGliL3J0L2l0Y21zL3BpblNwYWNlCBJ-bGliL3J0L2l0Y21zL2l0ZXIJFX5saWIvcnQvaXRjbXMvdG9TcGFjZQoTfmxpYi9ydC9pdGNtcy93aGl0ZQsXfmxpYi9ydC9pdGNtcy9mcm9tU3BhY2UMEX5saWIvcnQvdGxzZi9ST09UDSB-bGliL25hdGl2ZS9BU0NfTE9XX01FTU9SWV9MSU1JVA4XfmxpYi9uYXRpdmUvQVNDX1JVTlRJTUUPG35saWIvYnVpbHRpbnMvdTMyLk1BWF9WQUxVRRAcfmxpYi9uYXRpdmUvQVNDX1NIUklOS19MRVZFTBEQfmFyZ3VtZW50c0xlbmd0aBITfmxpYi9ydC9fX3J0dGlfYmFzZRMWfmxpYi9tZW1vcnkvX19kYXRhX2VuZBQbfmxpYi9tZW1vcnkvX19zdGFja19wb2ludGVyFRd-bGliL21lbW9yeS9fX2hlYXBfYmFzZQgEAQABMAAmEHNvdXJjZU1hcHBpbmdVUkwULi9zd2VldGNvcm4ud2FzbS5tYXA`,
-	'base64'
-);
+// console.time('ddd');
 
-let wasm_memory;
+//Nice Cube Price
+class Node {
+	constructor(item) {
+		this.item = item;
+		this.next = null;
+	}
+}
 
-WebAssembly.instantiate(code, {
-	sweetcorn: {
-		fd_stdin: (iov) => {
-			const [addr] = new Uint32Array(wasm_memory.buffer, iov, 1);
-			// const STDIN = 0;
-			return fs.readSync(0, new Uint8Array(wasm_memory.buffer, addr));
-		},
-		fd_stdout: (iov) => {
-			const [addr, limit] = new Uint32Array(wasm_memory.buffer, iov, 2);
-			// const STD_OUT = 1;
-			fs.writeSync(1, new Uint8Array(wasm_memory.buffer, addr, limit));
-		},
-	},
-	env: { abort: () => {} },
-}).then(async (wasm) => {
-	const { sweetCorn, memory } = wasm.instance.exports;
-	// 웹어셈블리 인스턴스에는
-	// sweetCorn 라는 함수와 웹어셈블리 memory 가 있음.
-	// 인풋을 그냥 파라미터로 받아서 memory는 딱히 필요 없음??
-	memory.grow(1);
-	// 메모리 사이즈를 키워주는 거 같음? 지금은 필요없음
-	wasm_memory = memory;
-	// wasm_memory 가 momory 를 참조하도록함.
-	sweetCorn();
+class Queue {
+	constructor() {
+		this.head = null;
+		this.tail = null;
+		this.length = 0;
+	}
+
+	push(item) {
+		const node = new Node(item);
+		if (this.head == null) {
+			this.head = node;
+		} else {
+			this.tail.next = node;
+		}
+
+		this.tail = node;
+		this.length += 1;
+	}
+
+	pop() {
+		const popItem = this.head;
+		this.head = this.head.next;
+		this.length -= 1;
+		return popItem.item;
+	}
+}
+
+const possibleSynergy = [
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[2, 0],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[1, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[2, 0],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 0],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[0, 1],
+		[1, 1],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[1, 1],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 0],
+		[1, 0],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[2, 0],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 1],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[0, 2],
+		[1, 2],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 1],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 1],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+	],
+	[
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+	],
+	[
+		[0, 2],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 2],
+	],
+	[
+		[0, 2],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[0, 2],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[0, 2],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+	],
+	[
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 2],
+	],
+	[
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[1, 0],
+		[1, 1],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[1, 0],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+	[
+		[1, 1],
+		[1, 2],
+		[2, 0],
+		[2, 1],
+		[2, 2],
+	],
+];
+
+const possibleNum = [];
+
+function possibleNumDfs(arr) {
+	if (arr.length == 5) {
+		possibleNum.push(arr);
+		return;
+	} else {
+		for (let i = 0; i < 5; i++) {
+			if (!arr.includes(i)) {
+				possibleNumDfs([...arr, i]);
+			}
+		}
+	}
+}
+
+
+
+possibleNumDfs([]);
+
+console.log(possibleNum)
+
+const input = require('fs')
+	.readFileSync('./dev/stdin')
+	.toString()
+	.trim()
+	.split('\n')
+	.map((v) => v.trim());
+const [H, W] = input
+	.shift()
+	.trim()
+	.split(' ')
+	.map((v) => Number(v));
+
+input.shift();
+const K = input
+	.shift()
+	.trim()
+	.split(' ')
+	.map((v) => BigInt(v));
+
+// const K = [
+// 	'358845337212887578',
+// 	'744258161128681717',
+// 	'174366162495847559',
+// 	'299532576696613754',
+// 	'249241735643126563',
+// 	'726614748184524775',
+// 	'784625319854366126',
+// 	'712498846183298498',
+// 	'248736632767176394',
+// 	'853569272662363813',
+// 	'254414293828319637',
+// 	'334278943134217181',
+// 	'977763282771572228',
+// 	'364194225215948875',
+// 	'819532298819874889',
+// 	'971438174898939171',
+// 	'416751918519874835',
+// 	'892768267198957247',
+// 	'882992217351331112',
+// 	'175391588523474983',
+// 	'594311484325374171',
+// 	'939385273332662657',
+// 	'425932917128648532',
+// 	'413224365348519144',
+// 	'946973877312314351',
+// 	'978228757827797649',
+// 	'943778735668184353',
+// 	'423444186474725522',
+// 	'821211425447144153',
+// 	'344237624717116286',
+// 	'538335279279952194',
+// 	'536249793942372897',
+// 	'554876743675268729',
+// 	'411454945822677296',
+// 	'464276435566822746',
+// 	'282739926427681498',
+// 	'933299161673168843',
+// 	'598129323771489583',
+// 	'818446176834463488',
+// 	'885872198947827875',
+// 	'927132843862163123',
+// 	'157415653616581748',
+// 	'215345278143651819',
+// 	'491487425526435274',
+// 	'471375375812861563',
+// 	'748617987627964374',
+// 	'374788232782269589',
+// 	'452933628299756822',
+// 	'216481852544544521',
+// 	'254363757199126194',
+// 	'227737125565166816',
+// 	'983453221317563738',
+// 	'816582438571997275',
+// 	'357777412715977555',
+// 	'583546463148713648',
+// 	'852855551286399617',
+// 	'515857672469794833',
+// 	'454914341762871381',
+// 	'674351519164418644',
+// 	'471698519892218475',
+// 	'536273313768937951',
+// 	'687948272115628228',
+// 	'836727933697393553',
+// 	'226532552269735154',
+// 	'123273615974558325',
+// 	'767153675151983228',
+// 	'628462868662785217',
+// 	'783492513791316963',
+// 	'116373434798434869',
+// 	'471955499446425942',
+// 	'852399171292292557',
+// 	'434955775894464355',
+// 	'658465931324146856',
+// 	'683876329421284445',
+// 	'517843814286428198',
+// 	'899146629597766946',
+// 	'117316267259575992',
+// 	'911896696966879581',
+// 	'323958798918636482',
+// 	'829217689623623862',
+// 	'221827886436231312',
+// 	'596771428865716438',
+// 	'468252473544728179',
+// 	'477528315328475528',
+// 	'193129938895563613',
+// 	'798365673713964985',
+// 	'676291531993847435',
+// 	'933326717268559511',
+// 	'482118136583947198',
+// 	'315552126496175291',
+// 	'142287745121592958',
+// 	'286548588614672228',
+// 	'722666641769446656',
+// 	'327438936538464458',
+// 	'936269224634335844',
+// 	'169881869177645484',
+// 	'567663967425472854',
+// 	'889447646181772655',
+// 	'897842277437152596',
+// 	'532623235421873351',
+// ];
+
+let board = input.map((v) => v.trim().split(''));
+
+const possibleSynergyNum = new Set();
+for (let i = 11111; i <= 99999; i++) {
+	for (let k = 0; k < K.length; k++) {
+		if (BigInt(K[k]) % BigInt(i) == 0) {
+			possibleSynergyNum.add(BigInt(i));
+			break;
+		}
+	}
+}
+const synergyValues = Array(100000).fill(0);
+
+for (let i = 1; i <= 9; i++) {
+	for (let j = i; j <= 9; j++) {
+		for (let k = j; k <= 9; k++) {
+			for (let l = k; l <= 9; l++) {
+				for (let m = l; m <= 9; m++) {
+					const tmp = [i, j, k, l, m];
+					let s = new Set();
+					possibleNum.forEach((v2) => {
+						const num = BigInt(
+							v2.reduce((r, v) => {
+								r += `${tmp[v]}`;
+								return r;
+							}, '')
+						);
+						if (possibleSynergyNum.has(num)) {
+							s.add(num);
+						}
+					});
+
+					const index = i * 10000 + j * 1000 + k * 100 + l * 10 + m;
+					synergyValues[index] =
+						BigInt(s.size * s.size) +
+						[...s].reduce((r, v) => {
+							r += v;
+							return r;
+						}, BigInt(0));
+				}
+			}
+		}
+	}
+}
+
+const standardDice = [];
+// 위, 아래, 왼쪽, 오른쪽
+const bdx = [-4, 4, 0, 0];
+const bdy = [0, 0, -4, 4];
+
+const ddx = [-1, 1, 0, 0];
+const ddy = [0, 0, -1, 1];
+
+const mdx = [1, 1, 1, 0, 0, -1, -1, -1];
+const mdy = [-1, 0, 1, -1, 1, -1, 0, 1];
+
+const dicePattern = [
+	////////////////////////0
+	[
+		[0, 1, 0, 0],
+		[1, 1, 1, 1],
+		[0, 1, 0, 0],
+	],
+	///////////////////////////1
+	[
+		[1, 0, 0, 0],
+		[1, 1, 1, 1],
+		[1, 0, 0, 0],
+	],
+	/////////////////////////// 2 3
+	[
+		[0, 1, 0, 0],
+		[1, 1, 1, 1],
+		[1, 0, 0, 0],
+	],
+	[
+		[1, 0, 0, 0],
+		[1, 1, 1, 1],
+		[0, 1, 0, 0],
+	],
+	///////////////////////////4 5
+	[
+		[0, 0, 1, 0],
+		[1, 1, 1, 1],
+		[1, 0, 0, 0],
+	],
+	[
+		[1, 0, 0, 0],
+		[1, 1, 1, 1],
+		[0, 0, 1, 0],
+	],
+	/////////////////////////// 6 7
+	[
+		[0, 0, 0, 1],
+		[1, 1, 1, 1],
+		[1, 0, 0, 0],
+	],
+	[
+		[1, 0, 0, 0],
+		[1, 1, 1, 1],
+		[0, 0, 0, 1],
+	],
+
+	/////////////////////////// 8 9
+	[
+		[0, 0, 1, 0],
+		[1, 1, 1, 1],
+		[0, 1, 0, 0],
+	],
+	[
+		[0, 1, 0, 0],
+		[1, 1, 1, 1],
+		[0, 0, 1, 0],
+	],
+	///////////////////////////10 11
+	[
+		[0, 0, 1, 1],
+		[0, 1, 1, 0],
+		[1, 1, 0, 0],
+	],
+	[
+		[1, 1, 0, 0],
+		[0, 1, 1, 0],
+		[0, 0, 1, 1],
+	],
+	/////////////////////////// 12 13
+	[
+		[0, 0, 1, 1],
+		[1, 1, 1, 0],
+		[1, 0, 0, 0],
+	],
+	[
+		[1, 0, 0, 0],
+		[1, 1, 1, 0],
+		[0, 0, 1, 1],
+	],
+	/////////////////////////// 14 15
+	[
+		[0, 1, 0, 0],
+		[0, 1, 1, 1],
+		[1, 1, 0, 0],
+	],
+	[
+		[1, 1, 0, 0],
+		[0, 1, 1, 1],
+		[0, 1, 0, 0],
+	],
+	/////////////////////////// 16 17
+	[
+		[0, 1, 0, 0],
+		[1, 1, 1, 0],
+		[0, 0, 1, 1],
+	],
+	[
+		[0, 0, 1, 1],
+		[1, 1, 1, 0],
+		[0, 1, 0, 0],
+	],
+	/////////////////////////// 18 19
+	[
+		[0, 0, 1, 1, 1],
+		[1, 1, 1, 0, 0],
+	],
+
+	[
+		[1, 1, 1, 0, 0],
+		[0, 0, 1, 1, 1],
+	],
+].map((v) => rotate(v));
+
+function rotate(arr1) {
+	const r = arr1.length;
+	const c = arr1[0].length;
+
+	const arr2 = Array.from(Array(c), () => Array(r));
+	for (let i = 0; i < r; i++) {
+		for (let j = 0; j < c; j++) {
+			arr2[j][r - i - 1] = arr1[i][j];
+		}
+	}
+
+	const arr3 = Array.from(Array(r), () => Array(c));
+	for (let i = 0; i < r; i++) {
+		for (let j = 0; j < c; j++) {
+			arr3[r - i - 1][c - j - 1] = arr1[i][j];
+		}
+	}
+	const arr4 = Array.from(Array(c), () => Array(r));
+	for (let i = 0; i < r; i++) {
+		for (let j = 0; j < c; j++) {
+			arr4[c - j - 1][i] = arr1[i][j];
+		}
+	}
+	return [arr1, arr2, arr3, arr4];
+}
+
+function isPartOfDice(i, j) {
+	return (
+		i >= 0 &&
+		j >= 0 &&
+		i + 4 < H &&
+		j + 4 < W &&
+		board[i][j] == '+' &&
+		board[i][j + 1] == '-' &&
+		board[i + 1][j] == '|' &&
+		board[i][j + 4] == '+' &&
+		board[i][j + 3] == '-' &&
+		board[i + 1][j + 4] == '|' &&
+		board[i + 4][j] == '+' &&
+		board[i + 4][j + 1] == '-' &&
+		board[i + 3][j] == '|' &&
+		board[i + 4][j + 4] == '+' &&
+		board[i + 4][j + 3] == '-' &&
+		board[i + 3][j + 4] == '|' &&
+		board[i + 1][j + 1] != 'o'
+	);
+}
+
+const transformDiceToFirstDicePattern = [
+	//0
+	(arr) => [
+		['', arr[0][1], '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
+	],
+	//1
+	(arr) => [
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts270(arr[2][0]), '', ''],
+	],
+	//2
+	(arr) => [
+		['', arr[0][1], '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts270(arr[2][0]), '', ''],
+	],
+	//3
+	(arr) => [
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
+	],
+	//4
+	(arr, r) => [
+		['', rotateParts270(arr[0][2]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts270(arr[2][0]), '', ''],
+	],
+	//5
+	(arr, r) => [
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts90(arr[2][2]), '', ''],
+	],
+	//6
+	(arr, r) => [
+		['', rotateParts180(arr[0][3]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts270(arr[2][0]), '', ''],
+	],
+	//7
+	(arr, r) => [
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts180(arr[2][3]), '', ''],
+	],
+	//8
+	(arr, r) => [
+		['', rotateParts270(arr[0][2]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
+	],
+	//9
+	(arr, r) => [
+		['', arr[0][1], '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], arr[1][3]],
+		['', rotateParts90(arr[2][2]), '', ''],
+	],
+	//10
+	(arr) => [
+		['', rotateParts270(arr[0][2]), '', ''],
+		[rotateParts90(arr[2][0]), arr[1][1], arr[1][2], rotateParts90(arr[0][3])],
+		['', arr[2][1], '', ''],
+	],
+	//11
+	(arr) => [
+		['', arr[0][1], '', ''],
+		[rotateParts270(arr[0][0]), arr[1][1], arr[1][2], rotateParts270(arr[2][3])],
+		['', rotateParts90(arr[2][2]), '', ''],
+	],
+	//12
+	(arr) => [
+		['', rotateParts270(arr[0][2]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], rotateParts90(arr[0][3])],
+		['', rotateParts270(arr[2][0]), '', ''],
+	],
+	//13
+	(arr, r) => [
+		['', rotateParts90(arr[0][0]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], rotateParts270(arr[2][3])],
+		['', rotateParts90(arr[2][2]), '', ''],
+	],
+
+	//14
+	(arr, r) => [
+		['', arr[0][1], '', ''],
+		[rotateParts90(arr[2][0]), arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
+	],
+	//15
+	(arr, r) => [
+		['', arr[0][1], '', ''],
+		[rotateParts270(arr[0][0]), arr[1][1], arr[1][2], arr[1][3]],
+		['', arr[2][1], '', ''],
+	],
+
+	//16
+	(arr, r) => [
+		['', arr[0][1], '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], rotateParts270(arr[2][3])],
+		['', rotateParts90(arr[2][2]), '', ''],
+	],
+
+	//17
+	(arr, r) => [
+		['', rotateParts270(arr[0][2]), '', ''],
+		[arr[1][0], arr[1][1], arr[1][2], rotateParts270(arr[0][3])],
+		['', arr[2][1], '', ''],
+	],
+
+	//18
+	(arr) => [
+		['', rotateParts180(arr[1][0]), '', ''],
+		[rotateParts90(arr[1][1]), arr[0][2], arr[0][3], arr[0][4]],
+		['', arr[1][2], '', ''],
+	],
+	//19
+	(arr) => [
+		['', arr[0][2], '', ''],
+		[rotateParts270(arr[0][1]), arr[1][2], arr[1][3], arr[1][4]],
+		['', rotateParts180(arr[0][0]), '', ''],
+	],
+];
+
+function rotateZero(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+	newDice[1][0][0] = dice[4][0][0];
+	newDice[1][0][1] = dice[4][0][1];
+	newDice[1][0][2] = dice[4][0][2];
+
+	newDice[2][0][0] = dice[1][0][0];
+	newDice[2][0][1] = dice[1][0][1];
+	newDice[2][0][2] = dice[1][0][2];
+
+	newDice[3][0][0] = dice[2][0][0];
+	newDice[3][0][1] = dice[2][0][1];
+	newDice[3][0][2] = dice[2][0][2];
+
+	newDice[4][0][0] = dice[3][0][0];
+	newDice[4][0][1] = dice[3][0][1];
+	newDice[4][0][2] = dice[3][0][2];
+	return newDice;
+}
+
+function rotateFive(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+
+	newDice[1][2][0] = dice[4][2][0];
+	newDice[1][2][1] = dice[4][2][1];
+	newDice[1][2][2] = dice[4][2][2];
+
+	newDice[2][2][0] = dice[1][2][0];
+	newDice[2][2][1] = dice[1][2][1];
+	newDice[2][2][2] = dice[1][2][2];
+
+	newDice[3][2][0] = dice[2][2][0];
+	newDice[3][2][1] = dice[2][2][1];
+	newDice[3][2][2] = dice[2][2][2];
+
+	newDice[4][2][0] = dice[3][2][0];
+	newDice[4][2][1] = dice[3][2][1];
+	newDice[4][2][2] = dice[3][2][2];
+
+	return newDice;
+}
+
+function rotateOne(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+
+	newDice[2][0][0] = dice[0][0][0];
+	newDice[2][1][0] = dice[0][1][0];
+	newDice[2][2][0] = dice[0][2][0];
+
+	newDice[5][0][0] = dice[2][0][0];
+	newDice[5][1][0] = dice[2][1][0];
+	newDice[5][2][0] = dice[2][2][0];
+
+	newDice[4][2][2] = dice[5][0][0];
+	newDice[4][1][2] = dice[5][1][0];
+	newDice[4][0][2] = dice[5][2][0];
+
+	newDice[0][0][0] = dice[4][2][2];
+	newDice[0][1][0] = dice[4][1][2];
+	newDice[0][2][0] = dice[4][0][2];
+
+	return newDice;
+}
+
+function rotateTwo(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+
+	newDice[0][2][0] = dice[1][2][2];
+	newDice[0][2][1] = dice[1][1][2];
+	newDice[0][2][2] = dice[1][0][2];
+
+	newDice[3][0][0] = dice[0][2][0];
+	newDice[3][1][0] = dice[0][2][1];
+	newDice[3][2][0] = dice[0][2][2];
+
+	newDice[5][0][2] = dice[3][0][0];
+	newDice[5][0][1] = dice[3][1][0];
+	newDice[5][0][0] = dice[3][2][0];
+
+	newDice[1][2][2] = dice[5][0][2];
+	newDice[1][1][2] = dice[5][0][1];
+	newDice[1][0][2] = dice[5][0][0];
+
+	return newDice;
+}
+
+function rotateThree(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+	newDice[0][2][2] = dice[2][2][2];
+	newDice[0][1][2] = dice[2][1][2];
+	newDice[0][0][2] = dice[2][0][2];
+
+	newDice[4][0][0] = dice[0][2][2];
+	newDice[4][1][0] = dice[0][1][2];
+	newDice[4][2][0] = dice[0][0][2];
+
+	newDice[5][2][2] = dice[4][0][0];
+	newDice[5][1][2] = dice[4][1][0];
+	newDice[5][0][2] = dice[4][2][0];
+
+	newDice[2][2][2] = dice[5][2][2];
+	newDice[2][1][2] = dice[5][1][2];
+	newDice[2][0][2] = dice[5][0][2];
+
+	return newDice;
+}
+
+function rotateFour(dice) {
+	const newDice = dice.map((parts) => parts.map((row) => [...row]));
+
+	newDice[1][0][0] = dice[0][0][2];
+	newDice[1][1][0] = dice[0][0][1];
+	newDice[1][2][0] = dice[0][0][0];
+
+	newDice[5][2][0] = dice[1][0][0];
+	newDice[5][2][1] = dice[1][1][0];
+	newDice[5][2][2] = dice[1][2][0];
+
+	newDice[3][2][2] = dice[5][2][0];
+	newDice[3][1][2] = dice[5][2][1];
+	newDice[3][0][2] = dice[5][2][2];
+
+	newDice[0][0][2] = dice[3][2][2];
+	newDice[0][0][1] = dice[3][1][2];
+	newDice[0][0][0] = dice[3][0][2];
+	return newDice;
+}
+
+function getrotatedDice(dice) {
+	const rotate01 = rotateZero(dice);
+	const rotate02 = rotateZero(rotate01);
+	const rotate03 = rotateZero(rotate02);
+
+	const rotate11 = rotateOne(dice);
+	const rotate12 = rotateOne(rotate11);
+	const rotate13 = rotateOne(rotate12);
+
+	const rotate21 = rotateTwo(dice);
+	const rotate22 = rotateTwo(rotate21);
+	const rotate23 = rotateTwo(rotate22);
+
+	const rotate31 = rotateThree(dice);
+	const rotate32 = rotateThree(rotate31);
+	const rotate33 = rotateThree(rotate32);
+
+	const rotate41 = rotateFour(dice);
+	const rotate42 = rotateFour(rotate41);
+	const rotate43 = rotateFour(rotate42);
+
+	const rotate51 = rotateFive(dice);
+	const rotate52 = rotateFive(rotate51);
+	const rotate53 = rotateFive(rotate52);
+
+	return [
+		dice,
+		rotate01,
+		rotate02,
+		rotate03,
+		rotate11,
+		rotate12,
+		rotate13,
+		rotate21,
+		rotate22,
+		rotate23,
+		rotate31,
+		rotate32,
+		rotate33,
+		rotate41,
+		rotate42,
+		rotate43,
+		rotate51,
+		rotate52,
+		rotate53,
+	];
+}
+
+function rotateParts90(str) {
+	return str[6] + str[3] + str[0] + str[7] + str[4] + str[1] + str[8] + str[5] + str[2];
+}
+function rotateParts180(str) {
+	return str[8] + str[7] + str[6] + str[5] + str[4] + str[3] + str[2] + str[1] + str[0];
+}
+function rotateParts270(str) {
+	return str[2] + str[5] + str[8] + str[1] + str[4] + str[7] + str[0] + str[3] + str[6];
+}
+
+function getParts(i, j) {
+	return `${board[i + 1][j + 1]}${board[i + 1][j + 2]}${board[i + 1][j + 3]}${board[i + 2][j + 1]}${
+		board[i + 2][j + 2]
+	}${board[i + 2][j + 3]}${board[i + 3][j + 1]}${board[i + 3][j + 2]}${board[i + 3][j + 3]}`;
+}
+
+function checkDicePattern(pattern, dice) {
+	const r = pattern.length;
+	const c = pattern[0].length;
+	for (let i = 0; i < r; i++) {
+		for (let j = 0; j < c; j++) {
+			if ((pattern[i][j] == 1 && dice[i][j] == '') || (pattern[i][j] == 0 && dice[i][j] != ''))
+				return false;
+		}
+	}
+	return true;
+}
+
+function beStandardDicePattern(arr, cnt) {
+	while (cnt < 4) {
+		const r = arr.length;
+		const c = arr[0].length;
+		let rotated = Array.from(Array(c), () => Array(r).fill(''));
+		for (let i = 0; i < r; i++) {
+			for (let j = 0; j < c; j++) {
+				if (arr[i][j] != '') {
+					const rotateParts = rotateParts90(arr[i][j]);
+					rotated[j][r - i - 1] = rotateParts;
+				}
+			}
+		}
+		arr = rotated;
+		cnt++;
+	}
+	return arr;
+}
+// console.time('find');
+for (let i = 0; i < H; i++) {
+	for (let j = 0; j < W; j++) {
+		if (isPartOfDice(i, j)) {
+			let dice = Array.from(Array(9), () => Array(9).fill(''));
+			dice[4][4] = getParts(i, j);
+			board[i + 1][j + 1] = 'o';
+
+			const q = new Queue();
+			q.push([i, j, 4, 4]);
+			while (q.length > 0) {
+				const [boardX, boardY, diceX, diceY] = q.pop();
+
+				for (let k = 0; k < 4; k++) {
+					const nbx = boardX + bdx[k];
+					const nby = boardY + bdy[k];
+					const ndx = diceX + ddx[k];
+					const ndy = diceY + ddy[k];
+
+					if (isPartOfDice(nbx, nby)) {
+						dice[ndx][ndy] = getParts(nbx, nby);
+						board[nbx + 1][nby + 1] = 'o';
+						q.push([nbx, nby, ndx, ndy]);
+					}
+				}
+			}
+
+			while (dice.length > 0) {
+				let zero = true;
+				for (let k = 0; k < dice[0].length; k++) {
+					if (dice[0][k] != '') {
+						zero = false;
+						break;
+					}
+				}
+				if (zero) {
+					dice.shift();
+				} else {
+					break;
+				}
+			}
+			while (dice.length > 0) {
+				let zero = true;
+				for (let k = 0; k < dice[0].length; k++) {
+					if (dice[dice.length - 1][k] != '') {
+						zero = false;
+						break;
+					}
+				}
+				if (zero) {
+					dice.pop();
+				} else {
+					break;
+				}
+			}
+
+			while (true) {
+				let zero = true;
+				for (let i = 0; i < dice.length; i++) {
+					if (dice[i][0] != '') {
+						zero = false;
+						break;
+					}
+				}
+				if (zero) {
+					for (let i = 0; i < dice.length; i++) {
+						dice[i].shift();
+					}
+				} else {
+					break;
+				}
+			}
+
+			while (true) {
+				let zero = true;
+				for (let i = 0; i < dice.length; i++) {
+					if (dice[i][dice[i].length - 1] != '') {
+						zero = false;
+						break;
+					}
+				}
+				if (zero) {
+					for (let i = 0; i < dice.length; i++) {
+						dice[i].pop();
+					}
+				} else {
+					break;
+				}
+			}
+
+			let findPattern = false;
+			for (let i = 0; i < dicePattern.length; i++) {
+				if (findPattern) break;
+				for (let j = 0; j < 4; j++) {
+					const pattern = dicePattern[i][j];
+					const patternRow = pattern.length;
+					const patternColumn = pattern[0].length;
+
+					const diceRow = dice.length;
+					const diceColumn = dice[0].length;
+					if (patternRow != diceRow || patternColumn != diceColumn) continue;
+					if (checkDicePattern(pattern, dice)) {
+						const result = transformDiceToFirstDicePattern[i](
+							beStandardDicePattern(dice, j)
+						);
+						standardDice.push(result);
+						findPattern = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+// console.timeEnd('find');
+// console.log(standardDice);
+// 이제 18번 돌린거 구하고..
+// 거기서 무슨무슨 가치 구하면됨.
+
+function getValueOfNumber(arr) {
+	let von = [];
+	for (let i = 0; i < 6; i++) {
+		const flatDice = arr[i].flat();
+		const s = flatDice.reduce((r, v) => {
+			r += v * v;
+			return r;
+		}, 0);
+		const l = +flatDice.sort((a, b) => b - a).join('');
+		const v = l % (s + 15);
+		von.push(v);
+	}
+
+	von = von.sort((a, b) => a - b);
+	return BigInt(von[0] + von[1] + von[5]);
+}
+
+function getValueOfNeighbor(arr) {
+	let valueOfNeighbor = 1;
+	for (let i = 0; i < 6; i++) {
+		const target = arr[i];
+		let cnt = 1;
+		if (Math.abs(target[0][0] - target[0][1]) <= 3) cnt++;
+		if (Math.abs(target[0][1] - target[0][2]) <= 3) cnt++;
+		if (Math.abs(target[1][0] - target[1][1]) <= 3) cnt++;
+		if (Math.abs(target[1][1] - target[1][2]) <= 3) cnt++;
+		if (Math.abs(target[2][0] - target[2][1]) <= 3) cnt++;
+		if (Math.abs(target[2][1] - target[2][2]) <= 3) cnt++;
+		if (Math.abs(target[0][0] - target[1][0]) <= 3) cnt++;
+		if (Math.abs(target[1][0] - target[2][0]) <= 3) cnt++;
+		if (Math.abs(target[0][1] - target[1][1]) <= 3) cnt++;
+		if (Math.abs(target[1][1] - target[2][1]) <= 3) cnt++;
+		if (Math.abs(target[0][2] - target[1][2]) <= 3) cnt++;
+		if (Math.abs(target[1][2] - target[2][2]) <= 3) cnt++;
+
+		valueOfNeighbor *= cnt;
+	}
+	return BigInt(valueOfNeighbor);
+}
+
+function getValueOfSynergy(arr) {
+	const vos = [];
+	for (let i = 0; i < 6; i++) {
+		const target = arr[i];
+		const synergy = possibleSynergy
+			.map((v) => {
+				let list = [];
+				v.forEach(([x, y]) => {
+					list.push(target[x][y]);
+				});
+
+				list = list.sort((a, b) => a - b);
+
+				const index = list[0] * 10000 + list[1] * 1000 + list[2] * 100 + list[3] * 10 + list[4];
+
+				return synergyValues[index];
+			})
+			.sort((a, b) => Number(a - b));
+		vos.push(synergy[0] + synergy[48] + synergy[24]);
+	}
+
+	const vos1 = vos[0] + vos[1] + vos[2];
+	const vos2 = vos[0] + vos[3] + vos[2];
+	const vos3 = vos[0] + vos[1] + vos[4];
+	const vos4 = vos[0] + vos[3] + vos[4];
+	const vos5 = vos[5] + vos[1] + vos[2];
+	const vos6 = vos[5] + vos[3] + vos[2];
+	const vos7 = vos[5] + vos[1] + vos[4];
+	const vos8 = vos[5] + vos[3] + vos[4];
+
+	let max = BigInt(0);
+	if (vos1 > max) max = vos1;
+	if (vos2 > max) max = vos2;
+	if (vos3 > max) max = vos3;
+	if (vos4 > max) max = vos4;
+	if (vos5 > max) max = vos5;
+	if (vos6 > max) max = vos6;
+	if (vos7 > max) max = vos7;
+	if (vos8 > max) max = vos8;
+
+	return max;
+}
+
+function getValueOfMine(arr) {
+	let vom = [0, 0, 0, 0, 0, 0];
+	for (let i = 0; i < 6; i++) {
+		const target = arr[i];
+		for (let x = 0; x < 3; x++) {
+			for (let y = 0; y < 3; y++) {
+				let cnt = 0;
+				let sum = 0;
+				for (let k = 0; k < 8; k++) {
+					const nx = x + mdx[k];
+					const ny = y + mdy[k];
+					if (nx < 0 || nx >= 3) continue;
+					if (ny < 0 || ny >= 3) continue;
+					cnt++;
+					sum += target[nx][ny];
+				}
+				const result = Math.abs(cnt - (sum % 9));
+				if (result <= 4) {
+					vom[i]++;
+				}
+			}
+		}
+	}
+
+	const vom01 = vom[0] * vom[1];
+	const vom02 = vom[0] * vom[2];
+	const vom03 = vom[0] * vom[3];
+	const vom04 = vom[0] * vom[4];
+	const vom51 = vom[5] * vom[1];
+	const vom52 = vom[5] * vom[2];
+	const vom53 = vom[5] * vom[3];
+	const vom54 = vom[5] * vom[4];
+	const vom12 = vom[2] * vom[1];
+	const vom23 = vom[3] * vom[2];
+	const vom34 = vom[4] * vom[3];
+	const vom41 = vom[1] * vom[4];
+
+	return BigInt(vom01 + vom02 + vom03 + vom04 + vom51 + vom52 + vom53 + vom54 + vom12 + vom23 + vom34 + vom41);
+}
+
+const BISHOP = [
+	0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 1, 2, 2, 3, 2, 3, 1, 1, 2, 2, 1, 2, 2, 3, 2, 2, 2, 2, 2, 3, 2, 3, 1, 2, 1, 2, 2,
+	3, 2, 3, 2, 3, 2, 3, 3, 4, 3, 4, 2, 2, 2, 2, 2, 3, 2, 3, 3, 3, 3, 3, 3, 4, 3, 4, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3,
+	2, 3, 2, 3, 2, 3, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2, 3, 3, 4, 3, 4, 3, 4, 3,
+	4, 2, 3, 2, 3, 2, 3, 2, 3, 3, 4, 3, 4, 3, 4, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 2, 3, 3,
+	2, 3, 3, 4, 2, 2, 3, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 2, 3, 3, 4, 3, 4, 2, 2, 3, 3, 2, 3, 3, 4, 3,
+	3, 3, 3, 3, 4, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 2, 3,
+	3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 1, 1, 2,
+	2, 2, 2, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 1, 1, 2, 2, 2, 2, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2, 3, 3, 3, 3,
+	3, 3, 3, 3, 4, 4, 4, 4, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 2, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 2, 2, 3, 3, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3,
+	3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 3, 3, 3, 3, 4, 4, 2, 2, 3, 3, 3, 3, 4, 4, 2, 2, 3, 3, 3, 3, 4,
+	4, 2, 2, 3, 3, 3, 3, 4, 4, 2, 2, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 2, 2, 3, 3, 3, 3, 4, 4, 3, 3, 3, 3,
+	4, 4, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3,
+	3, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 4, 4, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+];
+
+function getValueOfChess(dice) {
+	let valueOfChess = 0;
+	for (let i = 0; i < 6; i++) {
+		const target = dice[i]
+			.flat()
+			.map((v) => {
+				if (v % 2 == 0) {
+					return 1;
+				} else {
+					return 0;
+				}
+			})
+			.join('');
+		valueOfChess += BISHOP[parseInt(target, 2)];
+	}
+	return BigInt(valueOfChess);
+}
+
+function getValueOfCube(a, b, c, d, e) {
+	return Number((a + b + c + d + e) % BigInt(20010610));
+}
+
+// console.time('real');
+
+const result = new Map();
+const valueOfCubes = standardDice.map((v) => {
+	const planeIndexes = v
+		.flat()
+		.filter((v) => v != '')
+		.map((str) => [
+			[+str[0], +str[1], +str[2]],
+			[+str[3], +str[4], +str[5]],
+			[+str[6], +str[7], +str[8]],
+		]);
+	const rotatedDice = getrotatedDice(planeIndexes);
+	const caseOfRotate = rotatedDice.map((dice) => {
+		const key = dice.map((v) => v.flat().join('')).join('');
+
+		if (result.has(key)) {
+			return result.get(key);
+		}
+		// 숫자의 가치
+		// console.time('valueOfNumber');
+		const valueOfNumber = getValueOfNumber(dice);
+		// console.timeEnd('valueOfNumber');
+		// console.log('valueOfNumber', valueOfNumber);
+		// 이웃의 가치
+		// console.time('valueOfNeighbor');
+		const valueOfNeighbor = getValueOfNeighbor(dice);
+		// console.timeEnd('valueOfNeighbor');
+		// console.log('valueOfNeighbor', valueOfNeighbor);
+
+		// 시너지의 가치
+		// console.time('valueOfSynergy');
+		const valueOfSynergy = getValueOfSynergy(dice);
+		// console.timeEnd('valueOfSynergy');
+		// console.log('valueOfSynergy', valueOfSynergy);
+		// 지뢰찾기 가치
+		// console.time('valueOfMine');
+		const valueOfMine = getValueOfMine(dice);
+		// console.timeEnd('valueOfMine');
+		// console.log('valueOfMine', valueOfMine);
+		// 체스의 가치
+		// console.time('valueOfChess');
+		const valueOfChess = getValueOfChess(dice);
+		// console.timeEnd('valueOfChess');
+		// console.log('valueOfChess', valueOfNumber);
+		// 큐브의 가치
+		const valueOfCube = getValueOfCube(
+			valueOfChess,
+			valueOfMine,
+			valueOfSynergy,
+			valueOfNeighbor,
+			valueOfNumber
+		);
+		result.set(key, valueOfCube);
+		return valueOfCube;
+	});
+	const first = caseOfRotate[0];
+
+	let max = 0;
+	for (let i = 1; i < 19; i++) {
+		if (caseOfRotate[i] > max) max = caseOfRotate[i];
+	}
+	return [first, max];
 });
+// console.timeEnd('real');
+let firstSum = 0;
+let maxSum = 0;
+const valueOfCubesSorted = valueOfCubes
+	.sort((a, b) => {
+		const diffA = a[1] - a[0];
+		const diffB = b[1] - b[0];
+		return diffB - diffA;
+	})
+	.map((v) => {
+		firstSum += v[0];
+		maxSum += v[1];
+		return [firstSum, maxSum];
+	});
+valueOfCubesSorted.unshift([0, 0]);
+
+const answer = [];
+const P = valueOfCubesSorted.length;
+
+for (let i = 0; i < P; i++) {
+	answer.push(valueOfCubesSorted[i][1] + valueOfCubesSorted[P - 1][0] - valueOfCubesSorted[i][0]);
+}
+console.log(answer.join('\n'));
+// console.timeEnd('ddd');
