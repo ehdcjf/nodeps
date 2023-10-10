@@ -1,4 +1,4 @@
-console.time('main');
+console.time('kk');
 class Node {
 	constructor(item) {
 		this.item = item;
@@ -102,15 +102,43 @@ for (let a = 9; a >= 1; a--) {
 	}
 }
 function getPriceOfNumber(cube) {
-	const priceOfNumber = cube
-		.map((net) => {
-			const sideOfCube = [...net].sort((a, b) => b - a).reduce((r, v) => r + v, '');
+	let min0 = Infinity;
+	let min1 = 0;
+	let max = 0;
+	cube.forEach((net) => {
+		const str = [...net].sort((a, b) => b - a);
+		const num =
+			+str[0] * 100000000 +
+			+str[1] * 10000000 +
+			+str[2] * 1000000 +
+			+str[3] * 100000 +
+			+str[4] * 10000 +
+			+str[5] * 1000 +
+			+str[6] * 100 +
+			+str[7] * 10 +
+			+str[8];
 
-			return PriceOfNumber[sideOfCube];
-		})
-		.sort((a, b) => a - b);
-
-	return BigInt(priceOfNumber[0] + priceOfNumber[1] + priceOfNumber[5]);
+		const result = PriceOfNumber[num];
+		if (max == 0) {
+			min0 = result;
+			min1 = result;
+			max = result;
+		} else {
+			if (result > max) {
+				max = result;
+			} else {
+				if (result < min0) {
+					let tmp = min0;
+					min0 = result;
+					min1 = tmp;
+				} else if (result > min0 && result < min1) {
+					min1 = result;
+				}
+			}
+		}
+	});
+	// return BigInt(priceOfNumber[0] + priceOfNumber[1] + priceOfNumber[5]);
+	return BigInt(min0 + min1 + max);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +172,7 @@ function getPriceOfNeighbor(cube) {
 //////////////////////////////////////////////Price Of Synergy ////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-console.time('sssss');
+
 const possibleSynergyNum = new Set();
 
 for (let a = 1; a <= 9; a++) {
@@ -316,7 +344,7 @@ for (let a = 1; a <= 9; a++) {
 		}
 	}
 }
-console.timeEnd('sssss');
+
 const possibleSynergy = [
 	[0, 1, 2, 3, 4],
 	[0, 1, 2, 3, 5],
@@ -377,17 +405,20 @@ function getPriceOfSynergy(cube) {
 		}
 		const synergies = possibleSynergy
 			.map((synergy) => {
-				const x = [
-					net[synergy[0]],
-					net[synergy[1]],
-					net[synergy[2]],
-					net[synergy[3]],
-					net[synergy[4]],
-				].sort();
+				let count = new Array(10).fill(0);
 
-				return mapOfpriceOfSynergy.get(+`${x[0]}${x[1]}${x[2]}${x[3]}${x[4]}`);
+				synergy.forEach((v) => {
+					count[net[v]]++;
+				});
+				let str = '';
+				for (let i = 1; i <= 9; i++) {
+					for (let j = 0; j < count[i]; j++) {
+						str += `${i}`;
+					}
+				}
+				return mapOfpriceOfSynergy.get(+str);
 			})
-			.sort();
+			.sort((a, b) => a - b);
 		const result = BigInt(synergies[0] + synergies[48] + synergies[24]);
 		synergyMap.set(net, result);
 		return result;
@@ -422,30 +453,35 @@ function getPriceOfSynergy(cube) {
 function getPriceOfMine(cube) {
 	const priceOfMine = cube.map((net) => {
 		const target = [...net].map(Number);
-		const net0 = 3 - ((target[1] + target[3] + target[4]) % 9) <= 4 ? 1 : 0;
-		const net1 = 5 - ((target[0] + target[3] + target[4] + target[5] + target[2]) % 9) <= 4 ? 1 : 0;
-		const net2 = 3 - ((target[1] + target[5] + target[4]) % 9) <= 4 ? 1 : 0;
+		const net0 = Math.abs(3 - ((target[1] + target[3] + target[4]) % 9)) <= 4 ? 1 : 0;
+		const net1 =
+			Math.abs(5 - ((target[0] + target[3] + target[4] + target[5] + target[2]) % 9)) <= 4 ? 1 : 0;
+		const net2 = Math.abs(3 - ((target[1] + target[5] + target[4]) % 9)) <= 4 ? 1 : 0;
 
-		const net3 = 5 - ((target[0] + target[1] + target[4] + target[6] + target[7]) % 9) <= 4 ? 1 : 0;
+		const net3 =
+			Math.abs(5 - ((target[0] + target[1] + target[4] + target[6] + target[7]) % 9)) <= 4 ? 1 : 0;
 		const net4 =
-			8 -
-				((target[0] +
-					target[1] +
-					target[2] +
-					target[3] +
-					target[5] +
-					target[6] +
-					target[7] +
-					target[8]) %
-					9) <=
-			4
+			Math.abs(
+				8 -
+					((target[0] +
+						target[1] +
+						target[2] +
+						target[3] +
+						target[5] +
+						target[6] +
+						target[7] +
+						target[8]) %
+						9)
+			) <= 4
 				? 1
 				: 0;
-		const net5 = 5 - ((target[2] + target[1] + target[4] + target[7] + target[8]) % 9) <= 4 ? 1 : 0;
+		const net5 =
+			Math.abs(5 - ((target[2] + target[1] + target[4] + target[7] + target[8]) % 9)) <= 4 ? 1 : 0;
 
-		const net6 = 3 - ((target[7] + target[3] + target[4]) % 9) <= 4 ? 1 : 0;
-		const net7 = 5 - ((target[5] + target[3] + target[4] + target[6] + target[7]) % 9) <= 4 ? 1 : 0;
-		const net8 = 3 - ((target[7] + target[5] + target[4]) % 9) <= 4 ? 1 : 0;
+		const net6 = Math.abs(3 - ((target[7] + target[3] + target[4]) % 9)) <= 4 ? 1 : 0;
+		const net7 =
+			Math.abs(5 - ((target[5] + target[3] + target[4] + target[6] + target[8]) % 9)) <= 4 ? 1 : 0;
+		const net8 = Math.abs(3 - ((target[7] + target[5] + target[4]) % 9)) <= 4 ? 1 : 0;
 
 		return net0 + net1 + net2 + net3 + net4 + net5 + net6 + net7 + net8;
 	});
@@ -1093,7 +1129,6 @@ function getrotatedCube(cube) {
 	const rotate51 = rotateFive(cube);
 	const rotate52 = rotateFive(rotate51);
 	const rotate53 = rotateFive(rotate52);
-
 	return [
 		cube,
 		rotate01,
@@ -1116,7 +1151,7 @@ function getrotatedCube(cube) {
 		rotate53,
 	];
 }
-console.time('start');
+
 const standardNets = [];
 for (let i = 0; i < H; i++) {
 	for (let j = 0; j < W; j++) {
@@ -1127,31 +1162,28 @@ for (let i = 0; i < H; i++) {
 		}
 	}
 }
-console.timeEnd('start');
-console.time('kkk');
 const priceOfCubes = standardNets.map((standardNet) => {
 	const rotatedCube = getrotatedCube(standardNet);
 
 	const caseOfRotate = rotatedCube.map((cube) => {
-		// const priceOfNumber = getPriceOfNumber(cube);
-
+		const priceOfNumber = getPriceOfNumber(cube);
 		const priceOfNeighbor = getPriceOfNeighbor(cube);
 
-		// const priceOfSynergy = getPriceOfSynergy(cube);
+		const priceOfSynergy = BigInt(0);
+		//  getPriceOfSynergy(cube);
 
-		// const priceOfMine = getPriceOfMine(cube);
+		const priceOfMine = getPriceOfMine(cube);
+		const priceOfChess = getPriceOfChess(cube);
 
-		// const priceOfChess = getPriceOfChess(cube);
+		const priceOfCube = getPriceOfCube(
+			priceOfNumber,
+			priceOfNeighbor,
+			priceOfSynergy,
+			priceOfMine,
+			priceOfChess
+		);
 
-		// const priceOfCube = getPriceOfCube(
-		// 	priceOfNumber,
-		// 	priceOfNeighbor,
-		// 	priceOfSynergy,
-		// 	priceOfMine,
-		// 	priceOfChess
-		// );
-
-		// return priceOfCube;
+		return priceOfCube;
 	});
 
 	const first = caseOfRotate[0];
@@ -1162,8 +1194,7 @@ const priceOfCubes = standardNets.map((standardNet) => {
 	}
 	return [first, max];
 });
-console.timeEnd('kkk');
-console.time('lll');
+
 let firstSum = 0;
 let maxSum = 0;
 const priceOfCubesSorted = priceOfCubes
@@ -1185,7 +1216,5 @@ const P = priceOfCubesSorted.length;
 for (let i = 0; i < P; i++) {
 	answer.push(priceOfCubesSorted[i][1] + priceOfCubesSorted[P - 1][0] - priceOfCubesSorted[i][0]);
 }
-// console.log(answer.join('\n'));
-console.timeEnd('lll');
-
-console.timeEnd('main');
+console.log(answer.join('\n'));
+console.timeEnd('kk');

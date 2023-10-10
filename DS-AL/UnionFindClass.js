@@ -40,27 +40,4 @@ class UF {
 			this.subsets[yroot].rank++;
 		}
 	}
-
-	// The main function to check whether
-	// a given graph contains cycle or not
-	// function isCycle()
-	// {
-
-	//         let subsets = new Array(V);
-	//         for (let v = 0; v < V; v++) {
-
-	//             subsets[v] = new subset();
-	//             subsets[v].parent = v;
-	//             subsets[v].rank = 0;
-	//         }
-
-	//         for (let e = 0; e < E; e++) {
-	//             let x = find(subsets, edge[e].src);
-	//             let y = find(subsets, edge[e].dest);
-	//             if (x == y)
-	//                 return 1;
-	//             Union(subsets, x, y);
-	//         }
-	//         return 0;
-	// }
 }
