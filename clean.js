@@ -26,7 +26,7 @@ const prompts = require('prompts');
 		// },
 	]);
 	const file = fs.readFileSync('index.js').toString();
-	const fileName = file.split('\n')[0].split('/').pop();
+	const fileName = +file.split('\n')[0].split('/').pop();
 
 	if (!Number.isInteger(fileName)) {
 		console.error('require link');
