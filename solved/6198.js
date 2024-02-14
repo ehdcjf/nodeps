@@ -1,4 +1,4 @@
-// https://www.acmicpc.net/problem/6198
+//https://www.acmicpc.net/problem/6198
 const [N, ...arr] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\n').map(Number);
 
 class Node {
