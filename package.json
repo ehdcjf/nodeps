@@ -1,9 +1,10 @@
 {
-	"scripts": {
-		"start": "node ./index.js",
-		"clean": "node ./clean.js"
-	},
-	"dependencies": {
-		"prompts": "^2.4.2"
-	}
+  "name": "nodeps",
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
 }

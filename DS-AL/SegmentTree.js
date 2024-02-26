@@ -1,146 +1,152 @@
-function isPowerOfTwo(number) {
-	if (number < 1) {
-		return false;
+
+class Node{
+	constructor(left, right, value){
+		this.left = left;
+		this.right = right;
+		this.value = value;
 	}
 
-	let divideNumber = number;
-
-	while (divideNumber != 1) {
-		if (divideNumber % 2 !== 0) {
-			return false;
-		}
-		divideNumber /= 2;
-	}
-	return true;
 }
 
 class SegmentTree {
-	constructor(inputArray, operation, operationFallback) {
-		this.inputArray = inputArray;
-		this.operation = operation;
-		this.operationFallback = operationFallback;
-		this.segmentTree = this.initSegmentTree(this.inputArray);
-		this.buildSegmentTree();
-	}
-
-	initSegmentTree(inputArray) {
-		let segmentTreeArrayLength;
+	constructor(inputArray) {
 		const inputArrayLength = inputArray.length;
 
-		if (isPowerOfTwo(inputArrayLength)) {
-			segmentTreeArrayLength = 2 * inputArrayLength - 1;
-		} else {
-			const currentPower = Math.floor(Math.log2(inputArrayLength));
-			const nextPower = currentPower + 1;
-			const nextPowerOfTwo = 2 ** nextPower;
-			segmentTreeArrayLength = 2 * nextPowerOfTwo - 1;
+		const segmentTreeArrayLength = 2 ** Math.ceil(Math.log2(inputArrayLength));
+
+		this.n = segmentTreeArrayLength;
+
+		this.tree = new Array(2 * this.n).fill(0);
+
+		for (let i = 0; i < inputArrayLength; i++) {
+			this.tree[this.n + i] = inputArray[i];
 		}
 
-		return new Array(segmentTreeArrayLength).fill(null);
-	}
+		// 구성된 리프노드를 바탕으로 위로 올라가면서 트리를 채워준다.
 
-	buildSegmentTree() {
-		const leftIndex = 0;
-		const rightIndex = this.inputArray.length - 1;
-		const position = 0;
-		this.buildTreeRecursively(leftIndex, rightIndex, position);
-	}
-
-	getLeftChildIndex(parentIndex) {
-		return 2 * parentIndex + 1;
-	}
-
-	getRightChildIndex(parentIndex) {
-		return 2 * parentIndex + 2;
-	}
-
-	buildTreeRecursively(leftInputIndex, rightInputIndex, position) {
-		if (leftInputIndex == rightInputIndex) {
-			this.segmentTree[position] = this.inputArray[leftInputIndex];
-			return;
+		for (let i = this.n - 1; i > 0; --i) {
+			this.tree[i] = this.tree[i << 1] + this.tree[(i << 1) | 1];
 		}
+	}
 
-		const middleIndex = Math.floor((leftInputIndex + rightInputIndex) / 2);
+	build(){
 
-		this.buildTreeRecursively(leftInputIndex, middleIndex, this.getLeftChildIndex(position));
-		this.buildTreeRecursively(middleIndex + 1, rightInputIndex, this.getRightChildIndex(position));
 	}
 }
 
+// JavaScript program to implement persistent
+// segment tree.
+class node {
+	// Node constructor for l,r,v
+	constructor(l, r, v) {
+		this.left = l;
+		this.right = r;
+		this.val = v;
+	}
+}
 
+// Declaring maximum number
+var MAXN = 100;
 
-   // limit for array size 
-   let N = 1000001;  
-        
-   let n; // array size 
-       
-   // Max size of tree 
-   let tree = new Array(2 * N); 
-   tree.fill(0); 
-       
-   // function to build the tree 
-   function build(arr)  
-   {  
-	   
-       // insert leaf nodes in tree 
-       for (let i = 0; i < n; i++)  
-	   tree[n + i] = arr[i]; 
-	   
-       // build the tree by calculating 
-       // parents 
-       for (let i = n - 1; i > 0; --i)  
-	   tree[i] = tree[i << 1] + 
-		      tree[i << 1 | 1];  
-   } 
-       
-   // function to update a tree node 
-   function updateTreeNode(p, value)  
-   {  
-       // set value at position p 
-       tree[p + n] = value; 
-       p = p + n; 
-	   
-       // move upward and update parents 
-       for (let i = p; i > 1; i >>= 1) 
-	   tree[i >> 1] = tree[i] + tree[i^1]; 
-   } 
-       
-   // function to get sum on 
-   // interval [l, r) 
-   function query(l, r)  
-   {  
-       let res = 0; 
-	   
-       // loop to find the sum in the range 
-       for (l += n, r += n; l < r; 
-			    l >>= 1, r >>= 1) 
-       { 
-	   if ((l & 1) > 0)  
-	       res += tree[l++]; 
-	   
-	   if ((r & 1) > 0)  
-	       res += tree[--r]; 
-       } 
-	   
-       return res; 
-   } 
-     
-   let a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; 
-       
-   // n is global 
-   n = a.length; 
- 
-   // build tree  
-   build(a); 
- 
-   // print the sum in range(1,2) 
-   // index-based 
-   document.write(query(1, 3) + "</br>"); 
- 
-   // modify element at 2nd index 
-   updateTreeNode(2, 1); 
- 
-   // print the sum in range(1,2) 
-   // index-based 
-   document.write(query(1, 3));  
-     
+// Making Node for tree
+// Input array
+var arr = Array(MAXN);
+
+// Root pointers for all versions
+var version = Array(MAXN);
+
+// Constructs Version-0
+// Time Complexity : O(nlogn)
+function build(n, low, high) {
+	if (low == high) {
+		n.val = arr[low];
+		return;
+	}
+
+	var mid = parseInt((low + high) / 2);
+	n.left = new node(null, null, 0);
+	n.right = new node(null, null, 0);
+	build(n.left, low, mid);
+	build(n.right, mid + 1, high);
+	n.val = n.left.val + n.right.val;
+}
+
+/* Upgrades to new Version
+ * @param prev : points to node of previous version
+ * @param cur  : points to node of current version
+ * Time Complexity : O(logn)
+ * Space Complexity : O(logn)  */
+function upgrade(prev, cur, low, high, idx, value) {
+	if (idx > high || idx < low || low > high) return;
+
+	if (low == high) {
+		// Modification in new version
+		cur.val = value;
+		return;
+	}
+
+	var mid = parseInt((low + high) / 2);
+
+	if (idx <= mid) {
+		// Link to right child of previous version
+		cur.right = prev.right;
+
+		// Create new node in current version
+		cur.left = new node(null, null, 0);
+		upgrade(prev.left, cur.left, low, mid, idx, value);
+	} else {
+		// Link to left child of previous version
+		cur.left = prev.left;
+
+		// Create new node for current version
+		cur.right = new node(null, null, 0);
+		upgrade(prev.right, cur.right, mid + 1, high, idx, value);
+	}
+
+	// Calculating data for current version
+	// by combining previous version and current
+	// modification
+	cur.val = cur.left.val + cur.right.val;
+}
+
+function query(n, low, high, l, r) {
+	if (l > high || r < low || low > high) return 0;
+
+	if (l <= low && high <= r) return n.val;
+
+	var mid = parseInt((low + high) / 2);
+	var p1 = query(n.left, low, mid, l, r);
+	var p2 = query(n.right, mid + 1, high, l, r);
+	return p1 + p2;
+}
+
+// Driver code
+var A = [1, 2, 3, 4, 5];
+var n = A.length;
+
+for (var i = 0; i < n; i++) arr[i] = A[i];
+
+// Creating Version-0
+var root = new node(null, null, 0);
+build(root, 0, n - 1);
+
+// Storing root node for version-0
+version[0] = root;
+
+// Upgrading to version-1
+version[1] = new node(null, null, 0);
+upgrade(version[0], version[1], 0, n - 1, 4, 1);
+
+// Upgrading to version-2
+version[2] = new node(null, null, 0);
+upgrade(version[1], version[2], 0, n - 1, 2, 10);
+
+// For print
+document.write('In version 1 , query(0,4) : ');
+document.write(query(version[1], 0, n - 1, 0, 4));
+
+document.write('<br>In version 2 , query(3,4) : ');
+document.write(query(version[2], 0, n - 1, 3, 4));
+
+document.write('<br>In version 0 , query(0,3) : ');
+document.write(query(version[0], 0, n - 1, 0, 3));

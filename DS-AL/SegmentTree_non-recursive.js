@@ -1,3 +1,6 @@
+// https://www.geeksforgeeks.org/segment-tree-efficient-implementation/?ref=lbp
+// 비재귀 구현
+
 class NonRecursiveSegmentTree {
 	constructor(inputArray) {
 		// 세그먼트 트리를 구현하는 데 사용할 원소들의 개수를 확인한다.
