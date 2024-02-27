@@ -1,3 +1,4 @@
+// https://www.acmicpc.net/blog/view/117
 // 느리게 갱신되는 세그먼트 트리의 비재귀 구현
 
 class Node {
@@ -32,19 +33,47 @@ class NonRecursiveSegmentTreeWithLazyPropagation {
 		}
 	}
 
+	/**
+	 * i번 리프노드에 value 업데이트 적용
+	 * @param {Index} i
+	 * @param {Value} value
+	 */
 	updatePoint(i, value) {
 		i = (i - 1) | this.size;
+
+		// 루트노드부터, i번 노드까지 lazy 적용 (그동안 반영못했던 lazy를 반영)
+		// push 호출은 루트노드부너, i번 노드의 부모노드까지지만 
+		// push는 자식노드에 lazy를 전파하는 거니까.. 루트노드부터 i번 노드까지 그동안 미루던 lazy를 적용한다.                                             
 		for (let j = this.lg; j > 0; j--) this.push(i >> j);
+
+		// 리프노드에 update
 		this.apply(i, value);
+
+		// i번노드의 부모노드부터 루트노드까지 갱신
 		for (let j = 1; j <= this.lg; j++) this.pull(i >> j);
 	}
 
+
+	/**
+	 * i번 리프노드에 대한 쿼리
+	 * @param {Index} i
+	 * @returns {Node}
+	 */
 	queryPoint(i) {
+		// 리프노드의 위치
 		i = (i - 1) | this.size;
+
+		// 루트노드부터 i번 노드까지 lazy 적용
 		for (let j = this.lg; j > 0; j--) this.push(i >> j);
 		return this.tree[i];
 	}
 
+	/**
+	 *  [l,r] 범위의 리프노드에 value 업데이트 적용
+	 * @param {Index} l
+	 * @param {Index} r
+	 * @param {Value} value
+	 */
 	updateRange(l, r, value) {
 		l = (l - 1) | this.size;
 		r = (r - 1) | this.size;
@@ -65,6 +94,13 @@ class NonRecursiveSegmentTreeWithLazyPropagation {
 		}
 	}
 
+	/**
+	 * [l,r] 범위의 리프노드에 대한 쿼리
+	 *
+	 * @param {Index} l
+	 * @param {Index} r
+	 * @returns {Node}
+	 */
 	queryRange(l, r) {
 		let L = new Node();
 		let R = new Node();
@@ -82,31 +118,69 @@ class NonRecursiveSegmentTreeWithLazyPropagation {
 		return this.merge(L, R);
 	}
 
+	/**
+	 *
+	 * i번 노드에 value에 대한 업데이트를 적용하고, i번 노드의 lazy에 "서브트리에 value 업데이트를 적용하라는 표시를 남김"
+	 * @param {Index} i
+	 * @param {Value} value
+	 *
+	 */
 	apply(i, value) {
-		this.tree[i] = this.update(value, this.tree[i]);
-		if (i < this.size) this.lazy[i] = this.compose(value, this.lazy[i]);
+		this.tree[i] = this.update(value, this.tree[i]); // 업데이트하기
+		if (i < this.size) this.lazy[i] = this.composition(value, this.lazy[i]); // 표시하기
 	}
 
+	/**
+	 *
+	 * i번 노드의 lazy를 두 자식노드에 전파하고, lazy를 초기화
+	 *
+	 * @param {Index} i
+	 */
 	push(i) {
 		this.apply(i << 1, this.lazy[i]);
 		this.apply((i << 1) | 1, this.lazy[i]);
 		this.lazy[i] = 0;
 	}
 
+	/**
+	 *  i번 노드의 value를 i번 노드의 두 자식의 value을 합친 값으로 갱신
+	 * @param {Index} i
+	 */
 	pull(i) {
 		this.tree[i] = this.merge(this.tree[i << 1], this.tree[(i << 1) | 1]);
 	}
 
-	// 이게.. 매번 수정해줘야 하는 함수
+	/**
+	 * 아래 세 메서드의 경우 매개변수로 받아서 처리하는 게 좋을듯
+	 */
+
+	/**
+	 * 두 노드를 합치는 연산 수행
+	 * @param {Node} a
+	 * @param {Node} b
+	 * @returns {Node}
+	 */
 	merge(a, b) {
 		return new Node(a.value + b.value, a.size + b.size);
 	}
 
+	/**
+	 * Node에 lazyr값을 적용하는 연산 수행
+	 * @param {Value} lazy
+	 * @param {Node} node
+	 * @returns {Node}
+	 */
 	update(lazy, node) {
 		return new Node(node.value + lazy * node.size, node.size);
 	}
 
-	compose(a, b) {
+	/**
+	 * lazy 값 위에 lazy 값을 적용하는 연산을 수행
+	 * @param {Value} a
+	 * @param {Value} b
+	 * @returns {Value}
+	 */
+	composition(a, b) {
 		return a + b;
 	}
 }
