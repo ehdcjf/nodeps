@@ -12,7 +12,6 @@ class SegmentTree {
 	constructor(inputArray: Array<number>) {
 		const inputArrayLength = inputArray.length;
 
-		// inputArray를 감당할 수 있는 부모 노드 depth
 		this.lg = Math.ceil(Math.log2(inputArrayLength));
 
 		this.sz = 1 << this.lg;
@@ -20,7 +19,6 @@ class SegmentTree {
 		this.tree = Array.from(new Array(this.sz << 1), () => new Node());
 		this.lazy = new Array(this.sz).fill(0);
 
-		// 입력된 Array 리프노드에 할당
 		for (let i = 1; i <= inputArrayLength; i++) {
 			this.tree[(i - 1) | this.sz] = new Node(inputArray[i - 1], 1);
 		}

@@ -42,8 +42,8 @@ class NonRecursiveSegmentTreeWithLazyPropagation {
 		i = (i - 1) | this.size;
 
 		// 루트노드부터, i번 노드까지 lazy 적용 (그동안 반영못했던 lazy를 반영)
-		// push 호출은 루트노드부너, i번 노드의 부모노드까지지만 
-		// push는 자식노드에 lazy를 전파하는 거니까.. 루트노드부터 i번 노드까지 그동안 미루던 lazy를 적용한다.                                             
+		// push 호출은 루트노드부너, i번 노드의 부모노드까지지만
+		// push는 자식노드에 lazy를 전파하는 거니까.. 루트노드부터 i번 노드까지 그동안 미루던 lazy를 적용한다.
 		for (let j = this.lg; j > 0; j--) this.push(i >> j);
 
 		// 리프노드에 update
@@ -52,7 +52,6 @@ class NonRecursiveSegmentTreeWithLazyPropagation {
 		// i번노드의 부모노드부터 루트노드까지 갱신
 		for (let j = 1; j <= this.lg; j++) this.pull(i >> j);
 	}
-
 
 	/**
 	 * i번 리프노드에 대한 쿼리
@@ -113,7 +112,7 @@ class NonRecursiveSegmentTreeWithLazyPropagation {
 		}
 		for (; l <= r; l >>= 1, r >>= 1) {
 			if (l & 1) L = this.merge(L, this.tree[l++]);
-			if (~r & 1) R = this.merge(this.tree[(r--, R)]);
+			if (~r & 1) R = this.merge(this.tree[r--], R);
 		}
 		return this.merge(L, R);
 	}
