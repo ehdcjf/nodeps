@@ -14,11 +14,29 @@ const response = await fetch(link);
 const html = await response.text();
 const dom = new JSDOM(html, {});
 const title = dom.window.document.querySelector('#problem_title')?.innerHTML;
+const input = dom.window.document
+	.querySelector('#problem_input')
+	?.innerHTML.trim()
+	.replaceAll('<p>', '')
+	.replaceAll('</p>', '\n')
+	.replaceAll('<sup>', '^')
+	.replaceAll('</sup>', '')
+	.replaceAll('. ', '.\n')
+	.trimEnd();
+
+const output = dom.window.document
+	.querySelector('#problem_output')
+	?.innerHTML.trim()
+	.replaceAll('<p>', '')
+	.replaceAll('</p>', '\n')
+	.replaceAll('. ', '.\n');
 
 const indexTsContent = `
 // ${link}
 // ${title}
-const input = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')
+const input: string[] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')
+/*입력\n${input}\n\n
+출력\n${output}\n*/
 `;
 
 Bun.write('index.ts', indexTsContent);

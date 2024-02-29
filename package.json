@@ -1,10 +1,20 @@
 {
   "name": "nodeps",
+  "scripts": {
+    "solved": "bun solved.ts"
+  },
   "module": "index.ts",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/jsdom": "^21.1.6",
+    "@types/prompts": "^2.4.9"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "figlet": "^1.7.0",
+    "jsdom": "^24.0.0",
+    "prompts": "^2.4.2"
   }
 }
