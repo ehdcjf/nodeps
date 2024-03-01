@@ -1,5 +1,5 @@
 class Node {
-	constructor(public value = 0) {}
+	constructor(public value = 0, size = 0) {}
 }
 
 class SegmentTree {
