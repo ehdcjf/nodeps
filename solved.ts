@@ -1,7 +1,7 @@
 const solved = await(Bun.file('./index.ts')).text();
 const pnum = +solved.split('\n')[0].split('/').pop()!;
 
-if (typeof pnum !== 'number') {
+if (typeof pnum != 'number') {
 	console.error('require link');
 	process.exit(1);
 }

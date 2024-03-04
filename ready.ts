@@ -34,9 +34,10 @@ const output = dom.window.document
 const indexTsContent = `
 // ${link}
 // ${title}
-const input: string[] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')
 /*입력\n${input}\n\n
 출력\n${output}\n*/
+
+const input: string[] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')
 `;
 
 Bun.write('index.ts', indexTsContent);

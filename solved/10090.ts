@@ -1,3 +1,5 @@
+// https://www.acmicpc.net/problem/10090
+// Counting Inversions
 class Item {
 	constructor(public value = 0) {}
 }
@@ -31,8 +33,8 @@ class SegmentTree {
 		return new Item(A.value + B.value);
 	}
 
-	private update(lazy: number, item: Item): Item {
-		return new Item(item.value + lazy);
+	private update(value: number, item: Item): Item {
+		return new Item(item.value + value);
 	}
 
 	private apply(i: number, value: number) {
@@ -68,10 +70,14 @@ class SegmentTree {
 		return this.merge(L, R).value;
 	}
 }
+const input: string[] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\n');
+const N = +input[0]!;
+const nums = input[1].split(' ');
+const segmentTree = new SegmentTree(Array(N + 1).fill(0));
 
-const arr = [1, 2, 3, 4, 5];
-const test = new SegmentTree(arr);
-test.updatePoint(1, 10);
-console.log(test.queryPoint(1));
-console.log(test.queryRange(1, 5));
-console.log(test.queryRange(1, 5));
+let answer = 0;
+nums.forEach((num) => {
+	segmentTree.updatePoint(+num, 1);
+	answer += segmentTree.queryRange(+num + 1, N);
+});
+console.log(answer);

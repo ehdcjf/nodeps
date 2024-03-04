@@ -1,15 +1,6 @@
-# nodeps
+input의 개수에 비해 input의 범위가 클 때 => 좌표압축
 
-To install dependencies:
+점 업데이트, 구간 쿼리 => 세그먼트 트리
+구간 업데이트 구간 쿼리 => 레이지 세그먼트 트리
 
-```bash
-bun install
-```
 
-To run:
-
-```bash
-bun run index.js
-```
-
-This project was created using `bun init` in bun v1.0.26. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
