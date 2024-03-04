@@ -1,78 +1,130 @@
-// https://www.acmicpc.net/problem/6549
-// 히스토그램에서 가장 큰 직사각형
+// https://www.acmicpc.net/problem/2243
+// 사탕상자
+/*입력
+첫째 줄에 수정이가 사탕상자에 손을 댄 횟수 n(1 ≤ n ≤ 100,000)이 주어진다.
+다음 n개의 줄에는 두 정수 A, B, 혹은 세 정수 A, B, C가 주어진다.
+A가 1인 경우는 사탕상자에서 사탕을 꺼내는 경우이다.
+이때에는 한 정수만 주어지며, B는 꺼낼 사탕의 순위를 의미한다.
+이 경우 사탕상자에서 한 개의 사탕이 꺼내지게 된다.
+또, A가 2인 경우는 사탕을 넣는 경우이다.
+이때에는 두 정수가 주어지는데, B는 넣을 사탕의 맛을 나타내는 정수이고 C는 그러한 사탕의 개수이다.
+C가 양수일 경우에는 사탕을 넣는 경우이고, 음수일 경우에는 빼는 경우이다.
+맨 처음에는 빈 사탕상자에서 시작한다고 가정하며, 사탕의 총 개수는 2,000,000,000을 넘지 않는다.
+또한 없는 사탕을 꺼내는 경우와 같은 잘못된 입력은 주어지지 않는다.
+
+
+출력
+A가 1인 모든 입력에 대해서, 꺼낼 사탕의 맛의 번호를 출력한다.
+
+*/
+
 class Item {
-	prev: null | Item = null;
-	constructor(public value: any) {}
+	constructor(public value = 0) {}
 }
 
-class Stack {
-	top: null | Item = null;
-	size = 0;
-	constructor() {}
+class SegmentTree {
+	protected lg: number;
+	protected sz: number;
+	protected tree: Array<Item>;
 
-	push(value: any) {
-		const node = new Item(value);
-		node.prev = this.top;
-		this.top = node;
-		this.size += 1;
-	}
+	constructor(inputArray: Array<number>) {
+		const inputArrayLength = inputArray.length;
 
-	pop() {
-		if (this.top) {
-			const popItem = this.top;
-			this.top = this.top.prev;
-			this.size -= 1;
-			return popItem.value;
-		} else return null;
-	}
+		this.lg = Math.ceil(Math.log2(inputArrayLength));
 
-	peek() {
-		return this.top ? this.top.value : null;
-	}
+		this.sz = 1 << this.lg;
 
-	isEmpty() {
-		return this.size == 0;
-	}
-}
+		this.tree = Array.from(new Array(this.sz << 1), () => new Item());
 
-const input: string[] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\n');
-input.pop();
-const answer: string[] = [];
-input.map((v) => v.split(' ').map(BigInt)).forEach((arr) => {
-	arr.shift();
-	let max: bigint = BigInt(0);
-	const st = new Stack();
+		for (let i = 1; i <= inputArrayLength; i++) {
+			this.tree[(i - 1) | this.sz] = new Item(inputArray[i - 1]);
+		}
 
-	for(let i = 0; i<arr.length; i++){
-		const v = arr[i];
-		if(st.isEmpty()){
-			if(v>max) max = v;
-			st.push({ h: v, w: BigInt(1) });
-		}else{
-			if(v>max) max = v;
-			let sz = BigInt(0);
-			while(!st.isEmpty() && st.peek().h>v){
-				sz = sz == BigInt(0) ? st.peek().w : sz+ st.peek().w
-				const possible = st.pop().h * sz;
-				if(possible>max) max = possible;
-			}
-
-			if(st.isEmpty() || st.peek().h<v){
-				st.push({ h: v, w: sz+BigInt(1) });
-			}else if(st.peek().h==v){
-				st.peek().w += sz+BigInt(1);
-			}
+		for (let i = this.sz - 1; i > 0; i--) {
+			this.tree[i] = this.merge(this.tree[i << 1], this.tree[(i << 1) | 1]);
+			//  i << 1 은 왼쪽 자식 노드    i * 2
+			// (i << 1) | 1 은 오른쪽 자식 노드 i * 2 + 1
 		}
 	}
-	
-	let sz = BigInt(0);
-	while (!st.isEmpty()) {
-		sz = sz == BigInt(0) ? st.peek().w : sz+ st.peek().w
-		const possible = st.pop().h * sz;
-		if (possible > max) max = possible;
+
+	protected merge(A: Item, B: Item): Item {
+		return new Item(A.value + B.value);
 	}
 
-	answer.push(max.toString());
-});
+	protected update(value: number, item: Item): Item {
+		return new Item(item.value + value);
+	}
 
-console.log(answer.join('\n'));
+	protected apply(i: number, value: number) {
+		this.tree[i] = this.update(value, this.tree[i]);
+	}
+
+	protected pull(i: number) {
+		this.tree[i] = this.merge(this.tree[i << 1], this.tree[(i << 1) | 1]);
+	}
+
+	public updatePoint(i: number, value: number) {
+		i = (i - 1) | this.sz;
+		this.apply(i, value);
+		for (let j = 1; j <= this.lg; j++) this.pull(i >> j);
+	}
+
+	queryPoint(i: number) {
+		i = (i - 1) | this.sz;
+		return this.tree[i].value;
+	}
+
+	queryRange(l: number, r: number) {
+		let L = new Item();
+		let R = new Item();
+
+		l = (l - 1) | this.sz;
+		r = (r - 1) | this.sz;
+
+		for (; l <= r; l >>= 1, r >>= 1) {
+			if (l & 1) L = this.merge(L, this.tree[l++]);
+			if (~r & 1) R = this.merge(this.tree[r--], R);
+		}
+		return this.merge(L, R).value;
+	}
+}
+
+class CandyBox extends SegmentTree {
+	constructor() {
+		super(new Array(1_000_000 + 1).fill(0));
+	}
+
+	public find(rank: number) {
+		let node = 1;
+		while (node <= this.sz) {
+			let left = this.tree[node << 1].value;
+			if (left >= rank) {
+				node = node << 1;
+			} else {
+				node = (node << 1) | 1;
+				rank -= left;
+			}
+		}
+		return node;
+	}
+}
+
+const input: number[][] = require('fs')
+	.readFileSync('./dev/stdin')
+	.toString()
+	.trim()
+	.split('\n')
+	.map((v: string) => v.split(' ').map(Number));
+input.shift();
+const candyBox = new CandyBox();
+input.forEach((cmd) => {
+	switch (cmd[0]) {
+		case 1:
+			const result = candyBox.find(cmd[1]);
+			console.log(result);
+			break;
+		case 2:
+			candyBox.updatePoint(cmd[1], cmd[2]);
+			break;
+	}
+});

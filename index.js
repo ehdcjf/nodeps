@@ -1,13 +1,13 @@
+//https://www.acmicpc.net/problem/1517
+//버블 소트
 class Item {
-	constructor(public value = 0) {}
+	constructor(value = 0) {
+		this.value = value
+	}
 }
 
 class SegmentTree {
-	private lg: number;
-	private sz: number;
-	private tree: Array<Item>;
-
-	constructor(inputArray: Array<number>) {
+	constructor(inputArray) {
 		const inputArrayLength = inputArray.length;
 
 		this.lg = Math.ceil(Math.log2(inputArrayLength));
@@ -27,34 +27,34 @@ class SegmentTree {
 		}
 	}
 
-	private merge(A: Item, B: Item): Item {
+	merge(A, B) {
 		return new Item(A.value + B.value);
 	}
 
-	private update(value: number, item: Item): Item {
+	update(value, item) {
 		return new Item(item.value + value);
 	}
 
-	private apply(i: number, value: number) {
+	apply(i, value) {
 		this.tree[i] = this.update(value, this.tree[i]);
 	}
 
-	private pull(i: number) {
+	pull(i) {
 		this.tree[i] = this.merge(this.tree[i << 1], this.tree[(i << 1) | 1]);
 	}
 
-	public updatePoint(i: number, value: number) {
+	updatePoint(i, value) {
 		i = (i - 1) | this.sz;
 		this.apply(i, value);
 		for (let j = 1; j <= this.lg; j++) this.pull(i >> j);
 	}
 
-	queryPoint(i: number) {
+	queryPoint(i) {
 		i = (i - 1) | this.sz;
 		return this.tree[i].value;
 	}
 
-	queryRange(l: number, r: number) {
+	queryRange(l, r) {
 		let L = new Item();
 		let R = new Item();
 
@@ -68,10 +68,21 @@ class SegmentTree {
 		return this.merge(L, R).value;
 	}
 }
+const input = require('fs').readFileSync('./dev/stdin').toString().trim().split('\n');
+const N = +input[0];
+const nums = input[1]
+	.split(' ')
+	.map((v, i) => [i, +v])
+	.sort((a, b) => a[1] - b[1])
+	.map((v, i) => [v[0], i + 1])
+	.sort((a, b) => a[0] - b[0])
+	.map((v) => v[1]);
 
-const arr = [1, 2, 3, 4, 5];
-const test = new SegmentTree(arr);
-test.updatePoint(1, 10);
-console.log(test.queryPoint(1));
-console.log(test.queryRange(1, 5));
-console.log(test.queryRange(1, 5));
+const segmentTree = new SegmentTree(Array(N + 2).fill(0));
+
+let answer = 0;
+nums.forEach((num) => {
+	segmentTree.updatePoint(num, 1);
+	answer += segmentTree.queryRange(num + 1, N + 1);
+});
+console.log(answer);
