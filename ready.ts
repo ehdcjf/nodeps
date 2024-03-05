@@ -31,16 +31,17 @@ const output = dom.window.document
 	.replaceAll('</p>', '\n')
 	.replaceAll('. ', '.\n');
 
-const indexTsContent = `
-// ${link}
-// ${title}
-/*입력\n${input}\n\n
-출력\n${output}\n*/
+const indexContent = `// ${link}\n// ${title}\n/*입력\n${input}\n\n출력\n${output}\n*/`;
 
-const input: string[] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')
-`;
-
-Bun.write('index.ts', indexTsContent);
+Bun.write(
+	'index.ts',
+	indexContent +
+		`const input: string[] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')`
+);
+Bun.write(
+	'index.js',
+	indexContent + `const input = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')`
+);
 
 const sampledatas = dom.window.document.querySelectorAll('.sampledata');
 sampledatas.forEach((v) => {
