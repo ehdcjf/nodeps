@@ -73,36 +73,10 @@ const readline = require('readline').createInterface({
 	output: process.stdout,
 });
 const answer = [];
-const q = new Queue();
 readline.on('line', (line) => {
-	q.push(line.split(' ').map(Number));
+	//
 }).on('close', () => {
-	const [T] = q.pop();
-	for (let t = 0; t < T; t++) {
-		// 유저수
-		const [F] = q.pop();
-		const uf = new UF(F + 1);
-
-		// 관계를 맺어주기
-		const [R] = q.pop();
-		for (let r = 0; r < R; r++) {
-			const [a, b] = q.pop();
-			uf.union(a, b);
-		}
-		// 친구인지 아닌 지 확인
-		const [C] = q.pop();
-		const tcAnswer = [`Scenario ${t + 1}:`];
-		for (let c = 0; c < C; c++) {
-			const [a, b] = q.pop();
-			if (uf.find(a) == uf.find(b)) {
-				tcAnswer.push('1');
-			} else {
-				tcAnswer.push('0');
-			}
-		}
-		answer.push(tcAnswer.join('\n'));
-	}
-	console.log(answer.join('\n\n'));
+	console.log(answer.join('\n'));
 	process.exit();
 });
 

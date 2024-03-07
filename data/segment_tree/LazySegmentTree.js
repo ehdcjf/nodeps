@@ -87,9 +87,10 @@ class LazySegmentTree {
 	}
 }
 
-const arr = [1, 2, 3, 4, 5];
+const arr = Array(86400).fill(0);
 const test = new LazySegmentTree(arr);
 
-console.log(test.query(0, 1));
-test.updateRange(0, 1, 10);
-console.log(test.query(0, 1));
+test.updateRange(0, 1, 1);
+test.updateRange(1, 3, 1);
+test.updateRange(0, 2, 1);
+console.log(test.query(0, 3));

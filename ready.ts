@@ -36,11 +36,11 @@ const indexContent = `// ${link}\n// ${title}\n/*입력\n${input}\n\n출력\n${o
 Bun.write(
 	'index.ts',
 	indexContent +
-		`const input: string[] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')`
+		`\nconst input: string[] = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')`
 );
 Bun.write(
 	'index.js',
-	indexContent + `const input = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')`
+	indexContent + `\nconst input = require('fs').readFileSync('./dev/stdin').toString().trim().split('\\n')`
 );
 
 const sampledatas = dom.window.document.querySelectorAll('.sampledata');
