@@ -230,43 +230,44 @@ class MinHeap {
 
 
 const priority = (a, b) => {
-	if (a.o < b.o) return true;
-	else if (a.o > b.o) return false;
+	if (a.e < b.e) return true;
+	else if (a.e > b.e) return false;
 	else {
-		if (a.h < b.h) return true;
+		if (a.s < b.s) return true;
 		else return false;
 	}
 };
 
+const [[N], ...rawData] = require('fs')
+	.readFileSync('./dev/stdin').toString().split('\n').map(v => v.split(' ').map(Number))
+
+const d = rawData.pop()[0]
 
 
-const x = new PriorityQueue(priority)
+const pq = new PriorityQueue(priority)
+
+let end = -Infinity
+rawData.forEach(v => {
+
+	const [h, o] = v
+	const [s, e] = h > o ? [o, h] : [h, o]
+	end = e > end ? e : end
+	pq.push({ s, e })
+})
+
+let le = pq.peek().e
+let ls = le - d
 
 
+while (!pq.isEmpty()) {
 
+	
 
-
-x.push({ h: 0, o: 100 })
-x.push({ h: 1, o: 100 })
-x.push({ h: 2, o: 100 })
-x.push({ h: 0, o: 101 })
-x.push({ h: 0, o: 102 })
-x.push({ h: 1, o: 102 })
-x.push({ h: 2, o: 102 })
-x.push({ h: 3, o: 102 })
-
-console.log(x.peek())
-while (!x.isEmpty()) {
-	console.log(x.pop())
+	// 철도 이동
+	le++
+	ls++
 }
 
 
 
 
-
-
-const [[N], ...rawData] = require('fs')
-	.readFileSync('./dev/stdin').toString().split('\n').map(v => v.split(' ').map(Number))
-
-console.log(N)
-console.log(rawData)
